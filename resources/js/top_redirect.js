@@ -7,9 +7,9 @@ $(function () {
 
   function checkClass(className) {
     if ($(className).length) {
-      // if (className == completeMessage) {
-      //   AttendanceSetTimeout(5000);
-      // }
+      if (className == completeMessage) {
+        AttendanceSetTimeout(5000);
+      }
       if (className == alreadyAttendance) {
         AttendanceSetTimeout(3000);
       }
