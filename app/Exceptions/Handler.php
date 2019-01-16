@@ -54,6 +54,11 @@ class Handler extends ExceptionHandler
         if ($e instanceof DuplicateException) {
             return response()->view('error.already_attendance', ['exception' => $e]);
         }
+
+        if ($e instanceof UserNotFoundException) {
+            return response()->view('error.user_not_found', ['exception' => $e]);
+        }
+
         return parent::render($request, $e);
     }
 }

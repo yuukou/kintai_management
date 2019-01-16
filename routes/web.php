@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('', ['uses' => 'AttendanceController@getTop'])->name('attendance');
-Route::post('check', ['uses' => 'AttendanceController@checkForIpAddress'])->name('checkForIpAddress');
-Route::get('/{attendance}_complete/{user}', ['uses' => 'AttendanceController@getAttendanceComplete'])->name('attendanceComplete');
+Route::get('', ['uses' => 'AttendanceController@getTop'])->name('top');
+Route::post('arrive/{user}', ['uses' => 'AttendanceController@postStoreArrive'])->name('postStoreArrive');
+Route::post('leave/{user}', ['uses' => 'AttendanceController@postStoreLeave'])->name('postStoreLeave');
+Route::get('/{attendance}_complete/{user}', ['uses' => 'AttendanceController@getStoreComplete'])->name('storeComplete');
