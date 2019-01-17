@@ -8,10 +8,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Services\AttendanceService;
 use App\Services\UserService;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class AttendanceController
@@ -32,7 +32,7 @@ class AttendanceController
             ->with(['user' => $user, 'arrivedFlg' => $this->attendanceService->isArrived($user), 'leftFlg' => $this->attendanceService->isLeft($user)]);
     }
 
-    public function postStoreArrive(User $user, Request $request)
+    public function postStoreArrive(User $user, UserRequest $request)
     {
         $attendance = $request->input('attendance');
 
@@ -44,7 +44,7 @@ class AttendanceController
         return '';
     }
 
-    public function postStoreLeave(User $user, Request $request)
+    public function postStoreLeave(User $user, UserRequest $request)
     {
         $attendance = $request->input('attendance');
 
