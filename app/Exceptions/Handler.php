@@ -52,11 +52,18 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($e instanceof DuplicateException) {
-            return response()->view('error.already_attendance', ['exception' => $e]);
+            return response()->view('errors.already_attendance', ['exception' => $e]);
         }
 
         if ($e instanceof UserNotFoundException) {
-            return response()->view('error.user_not_found', ['exception' => $e]);
+            return response()->view('errors.user_not_found', ['exception' => $e]);
+        }
+
+        if ($this->isHttpException($e)) {
+            /** @var \Symfony\Component\HttpKernel\Exception\HttpException $e */
+            if ($e->getStatusCode() == 404) {
+                return response()->view('front.errors.404', ['exception' => $e, 'message' => trans('front/message.errors.404')], $e->getStatusCode());
+            }
         }
 
         return parent::render($request, $e);
