@@ -16,34 +16,37 @@ class AttendanceService extends Service
 {
     use SlackService;
 
-    public function check($query, $attendance)
+    public function storeArrive($user)
     {
-        $info = $this->getInfo($query);
+        $info = $this->getInfo($user);
 
-        $attendanceQuery = Attendance::where('date', '=', $info['date'])->where('user_id', '=', $info['shainId']);
-
-        if (!$attendanceQuery->exists()) {
-            $this->store($info['date'], $info['shainId']);
-            $this->arrive($info['shainName']);
-            $this->send();
-        } else {
-            $this->checkArriveDuplication($attendance);
-            $this->checkLeaveDuplication($attendance, $attendanceQuery);
-
-            $attendanceQuery = Attendance::where('date', '=', $info['date'])->where('user_id', '=', $info['shainId']);
-            $this->update($attendanceQuery, $info['date'], $info['shainId']);
-            $this->leave($info['shainName']);
-            $this->send();
-        }
+//        $this->checkArriveDuplication($attendance);
+        $this->store($info['date'], $info['shainId']);
+        $this->arrive($info['shainName']);
+        $this->send();
     }
 
-    public function checkAttendance($query)
+    public function storeLeave($user, $attendance)
     {
-        $shainId = $query->first()->id;
-        $date = Carbon::create();
-        $attendanceQuery = Attendance::where('date', '=', $date)->where('user_id', '=', $shainId);
+        $info = $this->getInfo($user);
+        $attendanceQuery = $this->getUserQuery($info['date'], $info['shainId']);
 
-        return $attendanceQuery->exists();
+//        $this->checkLeaveDuplication($attendance, $attendanceQuery);
+        $this->update($attendanceQuery, $info['date'], $info['shainId']);
+        $this->leave($info['shainName']);
+        $this->send();
+    }
+
+    public function isArrived($user)
+    {
+        $info = $this->getInfo($user);
+        return $this->getUserQuery($info['date'], $info['shainId'])->whereNotNull('arrive_at')->exists();
+    }
+
+    public function isLeft($user)
+    {
+        $info = $this->getInfo($user);
+        return $this->getUserQuery($info['date'], $info['shainId'])->whereNotNull('leave_at')->exists();
     }
 
     private function store($date, $shainId)
@@ -78,10 +81,12 @@ class AttendanceService extends Service
         }
     }
 
-    public function getAttendanceTime($query, $attendance)
+    public function getAttendanceTime($user, $attendance)
     {
-        $info = $this->getInfo($query);
-        $inputs = Attendance::where('date', '=', $info['date'])->where('user_id', '=', $info['shainId'])->first()->toArray();
+        $info = $this->getInfo($user);
+        $attendanceQuery = $this->getUserQuery($info['date'], $info['shainId']);
+
+        $inputs = $attendanceQuery->first()->toArray();
 
         if ($attendance == 'arrive') {
             $time = $inputs['arrive_at'];
@@ -94,15 +99,17 @@ class AttendanceService extends Service
         }
     }
 
-    private function getInfo($query)
+    private function getInfo($user)
     {
-        $shainName = $query->first()->name;
-        $shainId = $query->first()->id;
-        $date = Carbon::create();
-
-        return ['shainName' => $shainName,
-            'shainId' => $shainId,
-            'date' => $date
+        return [
+            'shainName' => $user->name,
+            'shainId' => $user->id,
+            'date' => Carbon::create()
         ];
+    }
+
+    private function getUserQuery($date, $shainId)
+    {
+        return Attendance::where('date', '=', $date)->where('user_id', '=', $shainId);
     }
 }

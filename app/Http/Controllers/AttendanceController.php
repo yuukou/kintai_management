@@ -27,41 +27,38 @@ class AttendanceController
 
     public function getTop()
     {
-        $query = $this->getQuery();
-
+        $user = $this->userService->getUserByIp();
         return view('attendance')
-            ->with('checkAttendanceFlg', $this->attendanceService->checkAttendance($query));
+            ->with(['user' => $user, 'arrivedFlg' => $this->attendanceService->isArrived($user), 'leftFlg' => $this->attendanceService->isLeft($user)]);
     }
 
-    public function checkForIpAddress(Request $request)
+    public function postStoreArrive(User $user, Request $request)
     {
         $attendance = $request->input('attendance');
 
-        $query = $this->getQuery();
-
-        $id = $query->first()->id;
-
         //この会社の社員の固定IPの中に一致するものがあるか否かで場合分けをする
-        if ($query->exists()) {
-            $this->attendanceService->check($query, $attendance);
-            return Redirect::route('attendanceComplete', [$attendance, $id]);
+        if ($user) {
+            $this->attendanceService->storeArrive($user);
+            return Redirect::route('storeComplete', [$attendance, $user->id]);
         }
-
         return '';
     }
 
-    public function getAttendanceComplete($attendance, User $user)
+    public function postStoreLeave(User $user, Request $request)
     {
-        $name = $user->name;
-        $query = $this->getQuery();
-        $time = $this->attendanceService->getAttendanceTime($query, $attendance);
-        return view('attendance_complete')->with(['attendance' => $attendance, 'name' => $name, 'time' => $time]);
+        $attendance = $request->input('attendance');
+
+        //この会社の社員の固定IPの中に一致するものがあるか否かで場合分けをする
+        if ($user) {
+            $this->attendanceService->storeLeave($user, $attendance);
+            return Redirect::route('storeComplete', [$attendance, $user->id]);
+        }
+        return '';
     }
 
-    private function getQuery()
+    public function getStoreComplete($attendance, User $user)
     {
-        $ipAddress = $_SERVER["REMOTE_ADDR"];
-        $query = User::where('ip_address', '=', $ipAddress);
-        return $query;
+        $time = $this->attendanceService->getAttendanceTime($user, $attendance);
+        return view('attendance_complete')->with(['attendance' => $attendance, 'name' => $user->name, 'time' => $time]);
     }
 }
