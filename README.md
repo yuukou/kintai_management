@@ -1,20 +1,17 @@
 勤怠管理システム
 
-# リポジトリ名
-kintai_management（社内勤怠管理システム）
+# 社内勤怠管理システム
+社内勤怠管理を行うシステム
 
-## Description
-社内勤怠管理を行うシステムで
+## 詳細
+社員に固定のIPを振り、それを事前にシステムに登録しておき、システムの出退勤管理画面で事前に登録してあるIPとアクセスしてきたIPを比較して、一致した場合に出退勤の処理を行う。
 
 ## Usage
-### Install
+### インストール
 ```sh
 mkdir kintai
 git clone https://github.com/yuukou/kintai_management.git
 ```
-
-### Open
-特定のソフトで開くとき
 
 ### Settings
 環境変数など
@@ -22,18 +19,8 @@ git clone https://github.com/yuukou/kintai_management.git
 ### Build
 コンパイルなど
 
-### Deploy
-![herokubutton](https://www.herokucdn.com/deploy/button.svg)  
-とかでもいい
-
 ### Run
 実行
-
-### Check
-```sh
-firefox http://localhost:8080/my-project &
-```
-とか
 
 ## Hints
 ### Options
