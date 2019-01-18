@@ -35,25 +35,17 @@ class AttendanceController
     public function postStoreArrive(User $user, UserRequest $request)
     {
         $attendance = $request->input('attendance');
+        $this->attendanceService->storeArrive($user);
 
-        //この会社の社員の固定IPの中に一致するものがあるか否かで場合分けをする
-        if ($user) {
-            $this->attendanceService->storeArrive($user);
-            return Redirect::route('storeComplete', [$attendance, $user->id]);
-        }
-        return '';
+        return Redirect::route('storeComplete', [$attendance, $user->id]);
     }
 
     public function postStoreLeave(User $user, UserRequest $request)
     {
         $attendance = $request->input('attendance');
+        $this->attendanceService->storeLeave($user, $attendance);
 
-        //この会社の社員の固定IPの中に一致するものがあるか否かで場合分けをする
-        if ($user) {
-            $this->attendanceService->storeLeave($user, $attendance);
-            return Redirect::route('storeComplete', [$attendance, $user->id]);
-        }
-        return '';
+        return Redirect::route('storeComplete', [$attendance, $user->id]);
     }
 
     public function getStoreComplete($attendance, User $user)

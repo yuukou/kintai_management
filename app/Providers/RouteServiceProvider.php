@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -23,9 +25,28 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
+
+        //--------------------
+        // ルーティングとモデルの紐づけ
+        // アクションのパラメータでモデルをDIできるようにする
+        // https://readouble.com/laravel/5.4/ja/routing.html
+        //--------------------
+
+        Route::bind('user', function ($id) {
+            // id型チェック 数値以外はNotFound
+            if(! is_numeric($id)){
+                throw new NotFoundHttpException(trans('message.error.record_not_found'));
+            }
+
+           $user = User::findOrFail($id);
+
+            if (is_null($user)) {
+                throw new NotFoundHttpException(trans('message.error.record_not_found'));
+            }
+
+           return $user;
+        });
     }
 
     /**
