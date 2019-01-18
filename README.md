@@ -22,16 +22,6 @@ git clone https://github.com/yuukou/kintai_management.git
 ### Run
 実行
 
-## Hints
-### Options
-コマンドのオプションとか
-
-### Distribute
-`*.zip`にするタスクとかあるなら
-
-### Examples Of Command
-コマンドの実行結果の例とか
-
 ## Future Releases
 今後の方針
 
