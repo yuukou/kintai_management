@@ -12,7 +12,9 @@ git clone https://github.com/yuukou/kintai_management.git
 ```
 
 ### Settings
-環境変数など
+PHP 7.1.19
+Laravel 5.7
+PostgreSQL 10.5
 
 ### Build
 コンパイルなど
@@ -21,7 +23,7 @@ git clone https://github.com/yuukou/kintai_management.git
 実行
 
 ## Future Releases
-今後の方針
+
 
 ## Contribution
 1. Fork it  
