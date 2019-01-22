@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.2.5-apache-node-browsers
+        environment:
+          APP_ENV: circleci
+          APP_DEBUG: true
+          DB_CONNECTION: sqlite
+    working_directory: ~/laravel
+    steps:
+      - checkout
+      - run: sudo apt install -y libsqlite3-dev zlib1g-dev
+      - run: sudo composer self-update
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - run: composer install
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - run: touch database/database.sqlite
+      - run: php artisan migrate
+      - run: ./vendor/bin/phpunit
