@@ -1,26 +1,59 @@
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/php:7.2.5-apache-node-browsers
-        environment:
-          APP_ENV: circleci
-          APP_DEBUG: true
-          DB_CONNECTION: sqlite
-    working_directory: ~/laravel
-    steps:
-      - checkout
-      - run: sudo apt install -y libsqlite3-dev zlib1g-dev
-      - run: sudo composer self-update
-      - restore_cache:
-          keys:
-            - composer-v1-{{ checksum "composer.lock" }}
-            - composer-v1-
-      - run: composer install
-      - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
-          paths:
-            - vendor
-      - run: touch database/database.sqlite
-      - run: php artisan migrate
-      - run: ./vendor/bin/phpunit
+#version: 2
+#jobs:
+#  build:
+#    docker:
+#      - image: circleci/php:7.2.5-apache-node-browsers
+#        environment:
+#          APP_ENV: circleci
+#          APP_DEBUG: true
+#          DB_CONNECTION: sqlite
+#
+#    environment:
+#          - APP_DEBUG: true
+#          - APP_ENV: testing
+#          - APP_KEY: APP_KEYを入れてください
+#          - DB_CONNECTION: circle_test
+#          - MYSQL_ALLOW_EMPTY_PASSWORD: true
+#
+#    working_directory: ~/laravel
+#    steps:
+#      - checkout
+#      - run: sudo apt install -y libsqlite3-dev zlib1g-dev
+#      - run: sudo composer self-update
+#      - restore_cache:
+#          keys:
+#            - composer-v1-{{ checksum "composer.lock" }}
+#            - composer-v1-
+#      - run: composer install
+#      - save_cache:
+#          key: composer-v1-{{ checksum "composer.lock" }}
+#          paths:
+#            - vendor
+#      - run: touch database/database.sqlite
+#      - run: php artisan migrate
+#      - run: ./vendor/bin/phpunit  
+
+ version: 2
+ jobs:
+     build:
+         steps:
+            - run: sudo apt-get install -y libsqlite3-dev
+            - run: cp .env.testing .env
+            - run: composer install -n --ignore-platform-reqs
+            - run: npm install
+            - run: npm run production
+            - run: vendor/bin/phpunit
+
+            - run:
+               name: Start Chrome Driver
+               command: ./vendor/laravel/dusk/bin/chromedriver-linux
+               background: true
+
+            - run:
+               name: Run Laravel Server
+               command: php artisan serve
+               background: true
+
+            - run:
+               name: Run Laravel Dusk Tests
+               command: php artisan dusk
