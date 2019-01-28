@@ -1,59 +1,68 @@
-#version: 2
-#jobs:
-#  build:
-#    docker:
-#      - image: circleci/php:7.2.5-apache-node-browsers
-#        environment:
-#          APP_ENV: circleci
-#          APP_DEBUG: true
-#          DB_CONNECTION: sqlite
-#
-#    environment:
-#          - APP_DEBUG: true
-#          - APP_ENV: testing
-#          - APP_KEY: APP_KEYを入れてください
-#          - DB_CONNECTION: circle_test
-#          - MYSQL_ALLOW_EMPTY_PASSWORD: true
-#
-#    working_directory: ~/laravel
-#    steps:
-#      - checkout
-#      - run: sudo apt install -y libsqlite3-dev zlib1g-dev
-#      - run: sudo composer self-update
-#      - restore_cache:
-#          keys:
-#            - composer-v1-{{ checksum "composer.lock" }}
-#            - composer-v1-
-#      - run: composer install
-#      - save_cache:
-#          key: composer-v1-{{ checksum "composer.lock" }}
-#          paths:
-#            - vendor
-#      - run: touch database/database.sqlite
-#      - run: php artisan migrate
-#      - run: ./vendor/bin/phpunit  
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.1-jessie-node-browsers-legacy
+      - image: postgres:latest
+        environment:
+          - POSTGRES_USER=postgres
 
- version: 2
- jobs:
-     build:
-         steps:
-            - run: sudo apt-get install -y libsqlite3-dev
-            - run: cp .env.testing .env
-            - run: composer install -n --ignore-platform-reqs
-            - run: npm install
-            - run: npm run production
-            - run: vendor/bin/phpunit
+    working_directory: ~/repo
+    steps:
+      - checkout
+      # Install PostgreSQL client toolsで足りないディレクトリを追加
+      - run: sudo mkdir -p /usr/share/man/man1
+      - run: sudo mkdir -p /usr/share/man/man7
 
-            - run:
-               name: Start Chrome Driver
-               command: ./vendor/laravel/dusk/bin/chromedriver-linux
-               background: true
+      - run:
+          name: Install PostgreSQL client tools
+          command: |
+            sudo apt-get -y update && sudo apt-get install -y postgresql-client
+      - run:
+          name: Install and enable pdo_pgsql php extension
+          command: |
+            sudo apt-get update && sudo apt-get install libpq-dev
+            sudo docker-php-ext-install pdo_pgsql && docker-php-ext-enable pdo_pgsql
+      - run:
+          name: Populate .env
+          command: cp .env.testing .env
+      - run:
+          name: Update composer
+          command: sudo composer self-update
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.json" }}
+            - composer-v1-
+      - run:
+          name: Install php dependencies
+          command: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.json" }}
+          paths:
+            - vendor
+      - run:
+          name: Prep the database and user, install extensions etc.
+          command: |
+            sudo -u root psql -h 127.0.0.1 -U postgres -c "create database homestead"
+            sudo -u root psql -h 127.0.0.1 -U postgres -c "create user homestead password 'secret'"
+            sudo -u root psql -h 127.0.0.1 -U postgres -c "grant all on database homestead to homestead"
+            sudo -u root psql -h 127.0.0.1 -U postgres homestead -c "create extension citext"
+      - run:
+          name: Populate .env
+          command: php artisan key:generate
+      - run:
+          name: Run database migrations
+          command: php artisan migrate --force
+          background: true
+      - run:
+         name: Start Chrome Driver
+         command: ./vendor/laravel/dusk/bin/chromedriver-linux
+         background: true
+      - run:
+         name: Run Laravel Server
+         command: php artisan serve
+         background: true
 
-            - run:
-               name: Run Laravel Server
-               command: php artisan serve
-               background: true
-
-            - run:
-               name: Run Laravel Dusk Tests
-               command: php artisan dusk
+      - run:
+         name: Run Laravel Dusk Tests
+         command: php artisan dusk
