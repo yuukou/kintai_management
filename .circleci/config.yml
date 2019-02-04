@@ -62,7 +62,9 @@ jobs:
          name: Run Laravel Server
          command: php artisan serve
          background: true
-
+      - run:
+         name: Run Seeder
+         command: php artisan db:seed
       - run:
          name: Run Laravel Dusk Tests
          command: php artisan dusk
