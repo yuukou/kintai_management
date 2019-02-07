@@ -175,7 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider'
+        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+        Olssonm\VeryBasicAuth\VeryBasicAuthServiceProvider::class,
     ],
 
     /*
