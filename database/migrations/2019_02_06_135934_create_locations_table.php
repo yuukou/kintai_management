@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterUsersTable20181212074158 extends Migration
+class CreateLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AlterUsersTable20181212074158 extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('remember_token');
+        Schema::create('locations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('address');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AlterUsersTable20181212074158 extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->rememberToken();
-        });
+        Schema::dropIfExists('locations');
     }
 }
