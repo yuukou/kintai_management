@@ -15,6 +15,7 @@ mix.js('resources/js/app.js', 'public/js')
   .js('resources/js/attendance.js', 'public/js')
   .js('resources/js/top_redirect.js', 'public/js')
   .js('resources/js/clock.js', 'public/js')
+  .js('resources/js/set_up.js', 'public/js')
   .sass('resources/sass/app.scss', 'public/css')
   .sass('resources/sass/attendance.scss', 'public/css').
 version();

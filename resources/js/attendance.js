@@ -1,5 +1,5 @@
 $(function () {
-  var btn = $('.btn');
+  var btn = $('.js_attendance_btn');
 
   btn.on('click', function () {
     var attendance = $(this).attr("id");

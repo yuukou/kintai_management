@@ -14,6 +14,7 @@
     <script src="{{ mix('/js/attendance.js') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/top_redirect.js') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/clock.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/set_up.js') }}" type="text/javascript"></script>
     <!--[if lt IE 9]>
     <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
