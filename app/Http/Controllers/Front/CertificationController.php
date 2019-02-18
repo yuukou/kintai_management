@@ -6,27 +6,25 @@
  * Time: 16:07
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
-use App\Services\LocationService;
-use App\Services\UserService;
+use App\Http\Controllers\Controller;
+use App\Services\Front\LocationService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CertificationController extends Controller
 {
-    private $service;
     private $locationService;
 
-    public function __construct(UserService $service, LocationService $locationService)
+    public function __construct(LocationService $locationService)
     {
-        $this->service = $service;
         $this->locationService = $locationService;
     }
 
     public function getCreate()
     {
-        return view('setup.create');
+        return view('front.setup.create');
     }
 
     public function postEntry(Request $request)

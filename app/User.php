@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
@@ -27,4 +25,21 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
+    protected $fillable = [
+        'name',
+        'email',
+        'status',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * token取得
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function token()
+    {
+        return $this->hasMany(Token::class);
+    }
 }
