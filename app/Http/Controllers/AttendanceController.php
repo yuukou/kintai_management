@@ -27,9 +27,8 @@ class AttendanceController
 
     public function getTop()
     {
-        $user = $this->userService->getUserByIp();
-        return view('attendance')
-            ->with(['user' => $user, 'arrivedFlg' => $this->attendanceService->isArrived($user), 'leftFlg' => $this->attendanceService->isLeft($user)]);
+//        return view('attendance');
+        return view('setup.create');
     }
 
     public function postStoreArrive(User $user, UserRequest $request)
