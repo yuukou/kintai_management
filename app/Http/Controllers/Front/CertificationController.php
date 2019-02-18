@@ -1,20 +1,19 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tanakayuko
- * Date: 2018/12/21
- * Time: 21:26
+ * User: yukotanaka
+ * Date: 2019-02-18
+ * Time: 16:07
  */
 
 namespace App\Http\Controllers;
-
 
 use App\Services\LocationService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class UserController extends Controller
+class CertificationController extends Controller
 {
     private $service;
     private $locationService;
