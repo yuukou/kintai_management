@@ -8,14 +8,13 @@
 
 namespace App\Services\Front;
 
+use App\Services\UserService as CommonService;
 use App\Exceptions\TokenException;
-use App\Services\Service;
 use App\Services\TokenService;
-use App\Token;
 use App\User;
 use Illuminate\Support\Facades\DB;
 
-class UserService extends Service
+class UserService extends CommonService
 {
     private $tokenService;
 
@@ -40,21 +39,5 @@ class UserService extends Service
 
             $this->tokenService->deleteToken($token);
         });
-    }
-
-    private function getUserForToken($token)
-    {
-        // Tokenが存在しない場合は、エラーにする。
-        $tokenUser = Token::query()->where('token', '=', $token)->first();
-        if (is_null($tokenUser)) {
-            throw new TokenException('トークンが存在しません。');
-        }
-
-        $tokenUser = $tokenUser->toArray();
-
-        /**
-         * User $user
-         */
-        return User::query()->where('id', '=', $tokenUser['user_id'])->firstOrFail();
     }
 }

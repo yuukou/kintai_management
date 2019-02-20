@@ -8,12 +8,12 @@
 
 namespace App\Services\Admin;
 
-use App\Services\Service;
+use App\Services\UserService as CommonService;
 use App\Services\TokenService;
 use App\Token;
 use App\User;
 
-class UserService extends Service
+class UserService extends CommonService
 {
     /**
      * @var UserSendMailService
@@ -50,6 +50,28 @@ class UserService extends Service
         $data['token'] = $token;
         $this->userSendMailService->sendMail($data);
 
-        return $token;
+        return $data = [
+            'user_id' => $userId,
+            'token' => $token
+        ];
+    }
+
+    /**
+     * 仮登録メール再送信
+     *
+     * @param $token
+     */
+    public function resendRegisterMail($token)
+    {
+       $this->tokenService->extensionTokenTime($token);
+
+        $user = $this->getUserForToken($token);
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'token' => $token
+            ];
+
+        $this->userSendMailService->sendMail($data);
     }
 }

@@ -13,9 +13,14 @@
 
 Route::group(['as' => 'front::'], function (){
     Route::get('register/complete/{token}', ['uses' => 'UserController@getRegisterComplete'])->name('register-complete');
+    // 仮登録トークン期限切れ
+    Route::get('register-timeout-token/{token}', ['uses' => 'UserController@getTimeoutToken'])->name('entry-timeout-token');
+
+    Route::get('register-timeout-token/{token}', ['uses' => 'UserController@getTimeoutToken'])->name('entry-timeout-token');
     Route::group(['middleware' => 'auth.very_basic', 'prefix' => ''], function() {
-        Route::get('/entry', ['uses' => 'CertificationController@getCreate'])->name('enry');
+        Route::get('/entry', ['uses' => 'CertificationController@getCreate'])->name('entry');
         Route::post('/entry', [ 'uses' => 'CertificationController@postEntry'])->name('post-entry');
+
 
         Route::get('', ['uses' => 'AttendanceController@getTop'])->name('top');
         Route::post('arrive/{user}', ['uses' => 'AttendanceController@postStoreArrive'])->name('postStoreArrive');

@@ -25,7 +25,6 @@ class AttendanceController extends Controller
 
     public function getTop()
     {
-//        return view('attendance');
         return view('front.setup.create');
     }
 

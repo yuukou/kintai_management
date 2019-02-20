@@ -8,9 +8,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\TokenException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Services\Admin\UserService;
+use App\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -30,22 +32,32 @@ class UserController extends Controller
 
     public function postCreate(UserRequest $request)
     {
-        $token = $this->service->store($request->all());
+        $data = $this->service->store($request->all());
 
-        // 当セッションは、仮登録メールの再送信時のトークンの有効期限を延長するために使用します。
-        // entry_token使用タイミングは以下になります。
-        // 1.仮登録状態でマイページからメールの再送信、
-        // 2. トークン有効期限が切れた時点から仮登録完了メール記載のURLをクリックし、メール再送信画面に遷移時
-        // トークン削除タイミングは本登録完了時
-        // tokenテーブルに使用用途のカラムがないため、DBからトークンを取得するのは妥当ではないと判断したため
-        // セッション保持をしています。
-        Session::put('entry_token', $token);
+        Session::put('register_token', $data['token']);
 
-        return Redirect::route('admin::register-pre_complete');
+        return Redirect::route('admin::register-pre_complete', ['user' => $data['user_id']]);
     }
 
-    public function getCreatePreComplete()
+    public function getCreatePreComplete(User $user)
     {
-        return view('admin.register.complete');
+        return view('admin.register.complete', ['name' => $user->name]);
+    }
+
+    /**
+     * 仮登録メール再送信
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getResendMailComplete()
+    {
+        $token = Session::get('register_token');
+        if (empty($token)) {
+            throw new TokenException('tokenが正しくありません。');
+        }
+
+        $this->service->resendRegisterMail($token);
+
+        return Redirect::route('admin::register');
     }
 }

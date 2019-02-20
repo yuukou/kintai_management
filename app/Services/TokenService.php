@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Exceptions\TokenException;
 use App\Token;
+use Illuminate\Support\Facades\Redirect;
 
 class TokenService extends Service
 {
@@ -61,15 +62,37 @@ class TokenService extends Service
         $userToken = Token::where('token', '=', $token)->first();
 
         if (is_null($userToken)){
-//            throw new TokenException('tokenが有効でありません。');
-            return false;
+            throw new TokenException('tokenが有効でありません。');
         } else {
             $result = $this->checkToken($userToken);
             if (! $result) {
-//                throw new TokenException('このtokenは期限切れです。');
-                return false;
+                return Redirect::route('front::entry-timeout-token');
             }
             return true;
         }
+    }
+
+    /**
+     * トークンの有効時間延長
+     *
+     * @param $token
+     */
+    public function extensionTokenTime($token)
+    {
+        $userToken = Token::query()->where('token', '=', $token)->first();
+
+        if(empty($userToken)){
+            throw new TokenException('該当するtokenが存在しません。');
+        }
+
+        // トークン削除
+        $this->deleteToken($token);
+
+        // 同じトークンでレコード再生成
+        // トークン再生成による、古いトークンの有効期限内での使用不可を防ぐため、
+        // トークンの有効期限を延長する方式を採用
+        $inputsToken['token'] = $token;
+        $inputsToken['user_id'] = $userToken->user_id;
+        Token::create($inputsToken);
     }
 }

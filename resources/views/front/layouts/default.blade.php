@@ -20,7 +20,7 @@
     <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="">
+    {{--<link rel="shortcut icon" href="">--}}
 </head>
 <body>
 <div class="container attendance">

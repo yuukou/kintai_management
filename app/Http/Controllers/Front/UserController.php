@@ -31,9 +31,26 @@ class UserController extends Controller
             throw new TokenException('tokenが正常ではありません。');
         };
 
-        Session::forget('entry_token');
+        Session::forget('register_token');
         $this->service->update($token);
 
         return view('front.setup.create');
+    }
+
+    /**
+     * トークン有効期限切れ
+     *
+     * @param $token
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getTimeoutToken($token)
+    {
+        if(empty($token)){
+            throw new TokenException('該当するトークンが存在しません。');
+        }
+
+        Session::put('register_token',$token);
+
+        return view('front.member.timeout_token');
     }
 }
