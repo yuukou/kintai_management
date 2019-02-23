@@ -35,8 +35,9 @@ class UserController extends Controller
         $data = $this->service->store($request->all());
 
         Session::put('register_token', $data['token']);
+        Session::flash('result_message', trans('admin/message.user.register.complete'));
 
-        return Redirect::route('admin::register-pre_complete', ['user' => $data['user_id']]);
+        return Redirect::route('admin::register');
     }
 
     public function getCreatePreComplete(User $user)
