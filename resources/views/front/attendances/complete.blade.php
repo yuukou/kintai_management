@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('front.layouts.default')
 @section('content')
     <div class="complete_message">
         @if($attendance == 'arrive')

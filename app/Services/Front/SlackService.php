@@ -6,7 +6,7 @@
  * Time: 12:56
  */
 
-namespace App\Services;
+namespace App\Services\Front;
 
 trait SlackService
 {

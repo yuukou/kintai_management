@@ -6,12 +6,13 @@
  * Time: 16:55
  */
 
-namespace App\Services;
+namespace App\Services\Front;
 
 
 use App\Location;
+use App\Services\Service;
 
-class LocationService
+class LocationService extends Service
 {
     public function storeLocation(array $inputs)
     {

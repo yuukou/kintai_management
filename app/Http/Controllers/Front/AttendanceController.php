@@ -6,32 +6,29 @@
  * Time: 19:00
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
-use App\Http\Requests\UserRequest;
-use App\Services\AttendanceService;
-use App\Services\UserService;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AttendanceRequest;
+use App\Services\Front\AttendanceService;
 use App\User;
 use Illuminate\Support\Facades\Redirect;
 
-class AttendanceController
+class AttendanceController extends Controller
 {
-    private $userService;
     private $attendanceService;
 
-    public function __construct(UserService $userService, AttendanceService $attendanceService)
+    public function __construct(AttendanceService $attendanceService)
     {
-        $this->userService = $userService;
         $this->attendanceService = $attendanceService;
     }
 
     public function getTop()
     {
-//        return view('attendance');
-        return view('setup.create');
+        return view('front.setup.create');
     }
 
-    public function postStoreArrive(User $user, UserRequest $request)
+    public function postStoreArrive(User $user, AttendanceRequest $request)
     {
         $attendance = $request->input('attendance');
         $this->attendanceService->storeArrive($user);
@@ -39,7 +36,7 @@ class AttendanceController
         return Redirect::route('storeComplete', [$attendance, $user->id]);
     }
 
-    public function postStoreLeave(User $user, UserRequest $request)
+    public function postStoreLeave(User $user, AttendanceRequest $request)
     {
         $attendance = $request->input('attendance');
         $this->attendanceService->storeLeave($user, $attendance);

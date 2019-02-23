@@ -1,33 +1,30 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tanakayuko
- * Date: 2018/12/21
- * Time: 21:26
+ * User: yukotanaka
+ * Date: 2019-02-18
+ * Time: 16:07
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
-
-use App\Services\LocationService;
-use App\Services\UserService;
+use App\Http\Controllers\Controller;
+use App\Services\Front\LocationService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class UserController extends Controller
+class CertificationController extends Controller
 {
-    private $service;
     private $locationService;
 
-    public function __construct(UserService $service, LocationService $locationService)
+    public function __construct(LocationService $locationService)
     {
-        $this->service = $service;
         $this->locationService = $locationService;
     }
 
     public function getCreate()
     {
-        return view('setup.create');
+        return view('front.setup.create');
     }
 
     public function postEntry(Request $request)

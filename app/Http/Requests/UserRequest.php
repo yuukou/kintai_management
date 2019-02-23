@@ -1,12 +1,13 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tanakayuko
- * Date: 2019/01/17
- * Time: 17:38
+ * User: yukotanaka
+ * Date: 2019-02-18
+ * Time: 20:53
  */
 
 namespace App\Http\Requests;
+
 
 class UserRequest extends Request
 {
@@ -18,22 +19,20 @@ class UserRequest extends Request
     public function rules()
     {
         $rules = [
-            'attendance' => [
+            'name' => [
+                'bail',
+                'bail',
                 'string',
-                'required'
-            ]
+                'max:'.config('project.user.name.max_length'),
+            ],
+            'email' => [
+                'bail',
+                'required',
+                'email',
+                'max:'.config('project.user.email.max_length'),
+            ],
         ];
 
         return $rules;
-    }
-
-    /**
-     * Set custom attributes for validator errors.
-     *
-     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
-     */
-    public function attributes()
-    {
-        return trans('form.attributes');
     }
 }

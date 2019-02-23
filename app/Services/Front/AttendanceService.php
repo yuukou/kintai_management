@@ -6,10 +6,11 @@
  * Time: 14:23
  */
 
-namespace App\Services;
+namespace App\Services\Front;
 
 use App\Attendance;
 use App\Exceptions\DuplicateException;
+use App\Services\Service;
 use Carbon\Carbon;
 
 class AttendanceService extends Service

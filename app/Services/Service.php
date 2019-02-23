@@ -8,6 +8,9 @@
 
 namespace App\Services;
 
+/**
+* サービスの共通処理
+*/
 abstract class Service
 {
 

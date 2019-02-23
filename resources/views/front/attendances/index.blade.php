@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('front.layouts.default')
 @section('content')
     <div id="realTimeClockArea" class="clock"></div>
     <div class="btns">

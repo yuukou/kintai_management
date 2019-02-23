@@ -59,6 +59,10 @@ class Handler extends ExceptionHandler
             return response()->view('errors.user_not_found', ['exception' => $e]);
         }
 
+        if ($e instanceof TokenException) {
+            return response()->view('errors.token_not_found', ['exception' => $e]);
+        }
+
         if ($this->isHttpException($e)) {
             /** @var \Symfony\Component\HttpKernel\Exception\HttpException $e */
             if ($e->getStatusCode() == 404) {
