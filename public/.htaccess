@@ -22,5 +22,5 @@
     #HTTPでアクセスしてきたものに関してはHTTPSにリダイレクトする
     RewriteEngine On
     RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https:
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
 </IfModule>
