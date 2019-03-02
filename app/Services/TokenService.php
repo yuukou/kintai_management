@@ -61,12 +61,13 @@ class TokenService extends Service
     {
         $userToken = Token::where('token', '=', $token)->first();
 
+
         if (is_null($userToken)){
             throw new TokenException('tokenが有効でありません。');
         } else {
             $result = $this->checkToken($userToken);
             if (! $result) {
-                return Redirect::route('front::entry-timeout-token');
+                return Redirect::route('front::register::timeout-token');
             }
             return true;
         }

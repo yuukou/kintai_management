@@ -12,6 +12,7 @@ use App\Services\UserService as CommonService;
 use App\Exceptions\TokenException;
 use App\Services\TokenService;
 use App\User;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Support\Facades\DB;
 
 class UserService extends CommonService
@@ -39,5 +40,7 @@ class UserService extends CommonService
 
             $this->tokenService->deleteToken($token);
         });
+
+        Sentinel::authenticate($user->toArray());
     }
 }

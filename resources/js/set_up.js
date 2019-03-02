@@ -86,23 +86,29 @@ $(function () {
                     $('div.hereArea p.errorMsg').text('位置情報が取得出来ませんでした。');
                 }
 
-                //ajaxでデータ送信
-                $.ajax({
-                    url: "/entry",
-                    type: "post",
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    async: true,
-                    dataType: 'json',
-                    data: {
-                        //郵便番号
-                        // zipcode: tmp_zip_code.split('-'),
-                        // 住所
-                        address: address,
-                    },
-                })
-                    .done(function (data) {
-                        console.log(data);
-                    });
+                if (confirm(address + 'で位置情報を登録します。\n本当によろしいでしょうか？')) {
+                    //ajaxでデータ送信
+                    $.ajax({
+                        url: "/entry",
+                        type: "post",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        async: true,
+                        dataType: 'json',
+                        data: {
+                            //郵便番号
+                            // zipcode: tmp_zip_code.split('-'),
+                            // 住所
+                            address: address,
+                        },
+                    })
+                        .done(function (data) {
+
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            alert("位置情報の登録に失敗しました。");
+                        });
+                }
+
                 return false;
             }
         );

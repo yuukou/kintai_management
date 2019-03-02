@@ -34,7 +34,7 @@ class UserController extends Controller
         Session::forget('register_token');
         $this->service->update($token);
 
-        return view('front.setup.create');
+        return view('front.register.complete');
     }
 
     /**

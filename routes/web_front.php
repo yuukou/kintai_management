@@ -12,15 +12,21 @@
 */
 
 Route::group(['as' => 'front::'], function (){
-    Route::get('register/complete/{token}', ['uses' => 'UserController@getRegisterComplete'])->name('register-complete');
-    // 仮登録トークン期限切れ
-    Route::get('register-timeout-token/{token}', ['uses' => 'UserController@getTimeoutToken'])->name('entry-timeout-token');
+    Route::group(['prefix' => 'register','as' => 'register::'], function (){
+        Route::get('register/complete/{token}', ['uses' => 'UserController@getRegisterComplete'])->name('complete');
+        // 仮登録トークン期限切れ
+        Route::get('register/timeout-token/{token}', ['uses' => 'UserController@getTimeoutToken'])->name('timeout-token');
+    });
 
-    Route::get('register-timeout-token/{token}', ['uses' => 'UserController@getTimeoutToken'])->name('entry-timeout-token');
     Route::group(['middleware' => 'auth.very_basic', 'prefix' => ''], function() {
-        Route::get('/entry', ['uses' => 'CertificationController@getCreate'])->name('entry');
-        Route::post('/entry', [ 'uses' => 'CertificationController@postEntry'])->name('post-entry');
+        Route::group(['prefix' => 'mypage', 'as' => 'mypage::'], function () {
+            Route::get('/', ['uses' => 'MypageController@getIndex'])->name('index');
+        });
 
+        Route::group(['prefix' => 'entry', 'as' => 'entry::'], function () {
+            Route::get('/', ['uses' => 'CertificationController@getCreate'])->name('entry');
+            Route::post('/', [ 'uses' => 'CertificationController@postEntry'])->name('post-entry');
+        });
 
         Route::get('', ['uses' => 'AttendanceController@getTop'])->name('top');
         Route::post('arrive/{user}', ['uses' => 'AttendanceController@postStoreArrive'])->name('postStoreArrive');

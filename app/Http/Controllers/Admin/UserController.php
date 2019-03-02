@@ -15,7 +15,6 @@ use App\Services\Admin\UserService;
 use App\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-
 class UserController extends Controller
 {
     private $service;

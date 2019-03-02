@@ -1,0 +1,33 @@
+.register-complete {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+  .register-complete-description {
+    font-size: 50px;
+    padding-bottom: 120px;
+  }
+
+  .btn-gradient-3d-simple {
+    font-size: 40px;
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    border-radius: 4px;
+    color: #ffffff;
+    background-image: linear-gradient(#6795fd 0%, #67ceff 100%);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.29);
+    border-bottom: solid 3px #5e7fca;
+  }
+
+  .btn-gradient-3d-simple:active {
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+    border-bottom: none;
+  }
+}

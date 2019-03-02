@@ -1,9 +1,12 @@
 {
-    "/js/app.js": "/js/app.js?id=539394f0555c3935e6e0",
-    "/css/app.css": "/css/app.css?id=8565e002482d824c25a7",
-    "/css/attendance.css": "/css/attendance.css?id=0bdca78c3335eca8cce6",
-    "/js/attendance.js": "/js/attendance.js?id=fcf17ec3f76dc34e4d8a",
-    "/js/clock.js": "/js/clock.js?id=d3a80e9af7ebc3639e0f",
-    "/js/set_up.js": "/js/set_up.js?id=2904323f8df50d87cacd",
-    "/js/top_redirect.js": "/js/top_redirect.js?id=6aeaaa8dc9cca7c34ffe"
+    "/js/app.js": "/js/app.js?id=b6914cdf78d27e3be9c2",
+    "/css/app.css": "/css/app.css?id=f9ac1388a5c44e0b9ad6",
+    "/css/attendance.css": "/css/attendance.css?id=69504712793a20d64f65",
+    "/css/mypage.css": "/css/mypage.css?id=842d2fe9b488d9dd3692",
+    "/css/register_complete.css": "/css/register_complete.css?id=20243b30e078ea1aae95",
+    "/js/attendance.js": "/js/attendance.js?id=2740809c70ce29049bc0",
+    "/js/clock.js": "/js/clock.js?id=10806d84afe067fbc413",
+    "/js/mypage.js": "/js/mypage.js?id=7141b122a3e2bb528cb3",
+    "/js/set_up.js": "/js/set_up.js?id=d88266e5fd0e47d057f3",
+    "/js/top_redirect.js": "/js/top_redirect.js?id=8dda4b8003d4ea290234"
 }

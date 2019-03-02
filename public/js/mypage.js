@@ -81,14 +81,14 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/set_up.js":
+/***/ "./resources/js/mypage.js":
 /*!********************************!*\
-  !*** ./resources/js/set_up.js ***!
+  !*** ./resources/js/mypage.js ***!
   \********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
@@ -212,14 +212,14 @@ $(function () {
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /*!**************************************!*\
-  !*** multi ./resources/js/set_up.js ***!
+  !*** multi ./resources/js/mypage.js ***!
   \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/vagrant/kintai/resources/js/set_up.js */"./resources/js/set_up.js");
+module.exports = __webpack_require__(/*! /home/vagrant/kintai/resources/js/mypage.js */"./resources/js/mypage.js");
 
 
 /***/ })
