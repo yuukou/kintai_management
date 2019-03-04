@@ -28,18 +28,59 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'password',
         'status',
         'created_at',
         'updated_at',
     ];
 
     /**
-     * token取得
+     * emailToken取得
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function token()
+    public function emailTokens()
     {
-        return $this->hasMany(Token::class);
+        return $this->hasMany(EmailToken::class);
+    }
+
+    /**
+     * permissionTokenの取得
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function permissionTokens()
+    {
+        return $this->hasMany(PermissionToken::class);
+    }
+
+    /**
+     * 認証処理に関する情報にの取得
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function auth()
+    {
+        return $this->hasMany(Auth::class);
+    }
+
+    /**
+     * 位置情報の取得
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function locations()
+    {
+        return $this->hasMany(Location::class);
+    }
+
+    /**
+     * エージェント情報の取得
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function agents()
+    {
+        return $this->hasMany(Agent::class);
     }
 }

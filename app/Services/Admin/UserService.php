@@ -8,10 +8,11 @@
 
 namespace App\Services\Admin;
 
+use App\EmailToken;
 use App\Services\UserService as CommonService;
 use App\Services\TokenService;
-use App\Token;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserService extends CommonService
 {
@@ -38,6 +39,8 @@ class UserService extends CommonService
             ];
 
         $inputData = $data;
+//        $inputData['password'] = $inputs['password'];
+        $inputData['password'] = Hash::make($inputs['password']);
         $inputData['status'] = USER_STATUS_TEMP;
         $result = User::create($inputData);
 
@@ -45,7 +48,7 @@ class UserService extends CommonService
         $userId = $result->id;
         $inputToken['token'] = $token;
         $inputToken['user_id'] = $userId;
-        Token::create($inputToken);
+        EmailToken::create($inputToken);
 
         $data['token'] = $token;
         $this->userSendMailService->sendMail($data);

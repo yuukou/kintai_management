@@ -15,10 +15,11 @@ class CreateAuthTable extends Migration
     {
         Schema::create('auth', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('token');
-            $table->string('agent');
+            $table->integer('user_id');
+            $table->integer('agent_id');
             $table->integer('location_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

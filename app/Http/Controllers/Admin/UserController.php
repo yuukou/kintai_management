@@ -31,10 +31,7 @@ class UserController extends Controller
 
     public function postCreate(UserRequest $request)
     {
-        $data = $this->service->store($request->all());
-
-        Session::put('register_token', $data['token']);
-        Session::flash('result_message', trans('admin/message.user.register.complete'));
+        $this->service->store($request->all());
 
         return Redirect::route('admin::register');
     }
