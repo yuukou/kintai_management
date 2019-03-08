@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exceptions\TokenException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Services\Admin\UserService;
@@ -33,28 +32,12 @@ class UserController extends Controller
     {
         $this->service->store($request->all());
 
+        Session::flash('result_message', trans('admin/message.user.register.complete'));
         return Redirect::route('admin::register');
     }
 
     public function getCreatePreComplete(User $user)
     {
         return view('admin.register.complete', ['name' => $user->name]);
-    }
-
-    /**
-     * 仮登録メール再送信
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function getResendMailComplete()
-    {
-        $token = Session::get('register_token');
-        if (empty($token)) {
-            throw new TokenException('tokenが正しくありません。');
-        }
-
-        $this->service->resendRegisterMail($token);
-
-        return Redirect::route('admin::register');
     }
 }

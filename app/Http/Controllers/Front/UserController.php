@@ -12,29 +12,37 @@ use App\Exceptions\TokenException;
 use App\Http\Controllers\Controller;
 use App\Services\Front\UserService;
 use App\Services\TokenService;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    private $service;
+    private $userService;
     private $tokenService;
 
-    public function __construct(UserService $service, TokenService $tokenService)
+    public function __construct(UserService $userService, TokenService $tokenService)
     {
-        $this->service = $service;
+        $this->userService = $userService;
         $this->tokenService = $tokenService;
     }
 
     public function getRegisterComplete($token)
     {
-        if (! $this->tokenService->checkTokenEffectivity($token)) {
-            throw new TokenException('tokenが正常ではありません。');
-        };
+//        $userToken = $this->tokenService->getEmailToken($token);
+//
+//        if (is_null($userToken)) {
+//            throw new TokenException('tokenが正常ではありません。');
+//        }
+//
+//        $result = $this->tokenService->checkToken($userToken);
+//        if (! $result) {
+//            return Redirect::route('front::register::timeout-token', ['token' => $token]);
+//        }
 
-        Session::forget('register_token');
-        $this->service->update($token);
+//        Session::forget('register_token');
+        $this->userService->update($token);
 
-        return view('front.register.complete');
+        return Redirect::route('front::login::index');
     }
 
     /**
@@ -45,12 +53,31 @@ class UserController extends Controller
      */
     public function getTimeoutToken($token)
     {
-        if(empty($token)){
+        if(empty($token)) {
             throw new TokenException('該当するトークンが存在しません。');
         }
 
-        Session::put('register_token',$token);
+//        Session::put('register_token',$token);
 
-        return view('front.member.timeout_token');
+        return view('front.register.timeout_token', ['token' => $token]);
+    }
+
+    /**
+     * 仮登録メール再送信
+     *
+     * @param $token
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getResendMailComplete($token)
+    {
+        if (empty($token)) {
+            throw new TokenException('tokenが正しくありません。');
+        }
+
+        $this->userService->resendRegisterMail($token);
+        Session::flash('result_message', trans('admin/message.user.resend_mail.complete'));
+
+        return Redirect::route('front::register::timeout-token', ['token' => $token]);
     }
 }

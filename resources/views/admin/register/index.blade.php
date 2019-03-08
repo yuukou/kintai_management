@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('layouts.app')
 @section('content')
 <div class="container">
     @if(Session::has('result_message'))
@@ -17,7 +17,7 @@
                         {{ Form::label('name', '名前', ['class' => 'col-md-4 col-form-label text-md-right']) }}
                         {{--<label for="name" class="col-md-4 col-form-label text-md-right">名前</label>--}}
 
-                        <div class="col-md-6">
+                        <div class="col-lg-6 col-sm-12">
                             {{--{{ Form::text('name', null, ['id' => 'name', 'class' => 'form-control' . $errors->has('name') ? ' is-invalid' : '', 'value' => old('name'), 'required autofocus']) }}--}}
                             {{ Form::text('name', null, ['id' => 'name', 'class' => 'form-control', 'value' => old('name'), 'required autofocus']) }}
 

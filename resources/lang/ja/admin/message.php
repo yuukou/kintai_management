@@ -10,6 +10,9 @@ return [
     'user' => [
         'register' => [
             'complete' => '社員登録完了',
+        ],
+        'resend_mail' => [
+            'complete' => 'メールを再送信しました。'
         ]
     ],
 ];

@@ -9,6 +9,7 @@
 namespace App\Services\Admin;
 
 use App\EmailToken;
+use App\Services\SendMailService;
 use App\Services\UserService as CommonService;
 use App\Services\TokenService;
 use App\User;
@@ -16,19 +17,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService extends CommonService
 {
-    /**
-     * @var UserSendMailService
-     */
-    private $userSendMailService;
-    /**
-     * @var TokenService
-     */
-    private $tokenService;
-
-    public function __construct(UserSendMailService $userSendMailService, TokenService $tokenService)
+    public function __construct(TokenService $tokenService, SendMailService $sendMailService)
     {
-        $this->userSendMailService = $userSendMailService;
-        $this->tokenService = $tokenService;
+        parent::__construct($tokenService, $sendMailService);
     }
 
     public function store(array $inputs)
@@ -51,30 +42,11 @@ class UserService extends CommonService
         EmailToken::create($inputToken);
 
         $data['token'] = $token;
-        $this->userSendMailService->sendMail($data);
+        $this->sendMailService->sendMail($data);
 
         return $data = [
             'user_id' => $userId,
             'token' => $token
         ];
-    }
-
-    /**
-     * 仮登録メール再送信
-     *
-     * @param $token
-     */
-    public function resendRegisterMail($token)
-    {
-       $this->tokenService->extensionTokenTime($token);
-
-        $user = $this->getUserForToken($token);
-        $data = [
-            'name' => $user->name,
-            'email' => $user->email,
-            'token' => $token
-            ];
-
-        $this->userSendMailService->sendMail($data);
     }
 }

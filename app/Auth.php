@@ -4,11 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Auth
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Auth newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Auth newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Auth query()
+ * @mixin \Eloquent
+ */
 class Auth extends Model
 {
     protected $fillable = [
-        'user_id',
-        'agent_id',
-        'location_id',
+        'terminal_location_id',
     ];
 }

@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attendance whereLeaveAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attendance whereUserId($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attendance whereDeletedAt($value)
  */
 class Attendance extends Model
 {

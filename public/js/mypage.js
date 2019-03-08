@@ -96,43 +96,7 @@
 $(function () {
   $('.js_set_up_btn').click(function (e) {
     //Userエージェント情報を取得する処理
-    var ua = navigator.userAgent;
-    console.log(ua);
-    console.log(chkBrowser());
-
-    function chkDevice() {
-      var device = false;
-
-      if (ua.indexOf('iphone') !== -1 || ua.indexOf('ipod') !== -1) {
-        device = 'iphone';
-      } else if (ua.indexOf('ipad') !== -1) {
-        device = 'ipad';
-      } else if (ua.indexOf('android') !== -1) {
-        device = 'android';
-      } else if (ua.indexOf('windows') !== -1 && ua.indexOf('phone') !== -1) {
-        device = 'windows_phone';
-      } else return '';
-
-      return device;
-    }
-
-    function chkBrowser() {
-      if (ua.indexOf('edge')) {
-        brw = 'edge';
-      } else if (ua.indexOf('chrome') !== -1 && ua.indexOf('edge') === -1) {
-        // Chrome
-        return 'chrome';
-      } else if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) {
-        // Safari
-        return 'safari';
-      } else if (ua.indexOf('firefox') !== -1) {
-        // FIrefox
-        return 'firefox';
-      } else {
-        return 'unknown_browser';
-      }
-    }
-
+    var browser = UAParser().browser;
     e.preventDefault(); // $('div.hereArea p.errorMsg').text('');
 
     navigator.geolocation.getCurrentPosition(here_success_callback, here_error_call);
@@ -158,8 +122,10 @@ $(function () {
         longitude = $search_here.data('lon');
       } else {
         longitude = position.coords.longitude;
-      } // Google Geocoding API
+      }
 
+      console.log(latitude);
+      console.log(longitude); // Google Geocoding API
 
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({
@@ -194,12 +160,18 @@ $(function () {
             async: true,
             dataType: 'json',
             data: {
-              //郵便番号
-              // zipcode: tmp_zip_code.split('-'),
+              //位置情報（緯度・経度）
+              longitude: longitude,
+              latitude: latitude,
               // 住所
-              address: address
+              address: address,
+              //端末情報としてブラウザ情報を使用する
+              terminal: browser
             }
-          }).done(function (data) {}).fail(function (jqXHR, textStatus, errorThrown) {
+          }).done(function (data) {
+            console.log(data);
+            $('.address1').text(data['address']);
+          }).fail(function (jqXHR, textStatus, errorThrown) {
             alert("位置情報の登録に失敗しました。");
           });
         }

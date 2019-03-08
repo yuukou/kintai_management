@@ -9,17 +9,23 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\Front\TerminalLocationService;
+use Illuminate\Support\Facades\Auth;
 
 class MypageController extends Controller
 {
-    public function __construct()
+    private $terminalLocationService;
+
+    public function __construct(TerminalLocationService $terminalLocationService)
     {
+        $this->terminalLocationService = $terminalLocationService;
     }
 
-    public function getIndex(Request $request)
+    public function getIndex()
     {
-        return view('front.mypage.index');
+        $user = Auth::user();
+        $addressList = $this->terminalLocationService->getAddress($user->id);
+        return view('front.mypage.index', ['user' => $user ,'addressList' => $addressList]);
     }
 
     public function getEdit()

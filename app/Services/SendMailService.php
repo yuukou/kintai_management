@@ -33,4 +33,20 @@ class SendMailService
         Mail::to($to)->queue(new Mailable($subject, $markDown, $content, $attaches, $from, $fromName, $replyTo, $returnPath, $bcc));
         Log::info('メール送信完了', compact('to', 'subject', 'from', 'fromName', 'replyTo', 'returnPath', 'bcc', 'markDown', 'attaches', 'content'));
     }
+
+    public function sendMail(array $data)
+    {
+        $to = $data['email'];
+        $subject = trans('email.register.subject');
+        $markDown = trans('emails.register');
+        $content = $data;
+        $attaches = null;
+        $from = trans('email.register.from');
+        $fromName = trans('email.register.from_name');
+        $replyTo = trans('email.register.reply_to');
+        $returnPath = '';
+        $bcc = '';
+
+        $this->sendTo($to, $subject, $markDown, $content, $attaches, $from, $fromName, $replyTo, $returnPath, $bcc);
+    }
 }

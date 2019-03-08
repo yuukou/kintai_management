@@ -1,4 +1,4 @@
-@extends('front.layouts.default')
+@extends('layouts.default')
 @section('content')
     <div class="register-complete">
         <div class="register-complete-description">

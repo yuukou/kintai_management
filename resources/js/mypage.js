@@ -2,43 +2,7 @@ $(function () {
     $('.js_set_up_btn').click(function (e) {
 
         //Userエージェント情報を取得する処理
-        let ua = navigator.userAgent;
-        console.log(ua);
-        console.log(chkBrowser());
-
-        function chkDevice() {
-            let device = false;
-            if(ua.indexOf('iphone') !== -1 || ua.indexOf('ipod') !== -1){
-                device = 'iphone';
-            } else if (ua.indexOf('ipad')    !== -1){
-                device =  'ipad';
-            } else if (ua.indexOf('android') !== -1){
-                device =  'android';
-            } else if (ua.indexOf('windows') !== -1 && ua.indexOf('phone') !== -1){
-                device =  'windows_phone';
-            }
-            else return '';
-            return device;
-        }
-
-        function chkBrowser()
-        {
-            if (ua.indexOf('edge')){
-                brw = 'edge';
-            } else if (ua.indexOf('chrome')  !== -1 && ua.indexOf('edge') === -1){
-                // Chrome
-                return 'chrome';
-            } else if (ua.indexOf('safari')  !== -1 && ua.indexOf('chrome') === -1){
-                // Safari
-                return 'safari';
-            } else if (ua.indexOf('firefox') !== -1){
-                // FIrefox
-                return 'firefox';
-            }
-            else {
-                return 'unknown_browser';
-            }
-        }
+        let browser = UAParser().browser;
 
         e.preventDefault();
         // $('div.hereArea p.errorMsg').text('');
@@ -64,6 +28,9 @@ $(function () {
             } else {
                 longitude = position.coords.longitude;
             }
+
+            console.log(latitude);
+            console.log(longitude);
 
             // Google Geocoding API
             let geocoder = new google.maps.Geocoder();
@@ -95,14 +62,18 @@ $(function () {
                             async: true,
                             dataType: 'json',
                             data: {
-                                //郵便番号
-                                // zipcode: tmp_zip_code.split('-'),
+                                //位置情報（緯度・経度）
+                                longitude:longitude,
+                                latitude:latitude,
                                 // 住所
                                 address: address,
+                                //端末情報としてブラウザ情報を使用する
+                                terminal: browser,
                             },
                         })
                             .done(function (data) {
-
+                                console.log(data);
+                                $('.address1').text(data['address']);
                             })
                             .fail(function (jqXHR, textStatus, errorThrown) {
                                 alert("位置情報の登録に失敗しました。");

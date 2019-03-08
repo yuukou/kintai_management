@@ -9,17 +9,18 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Services\Front\LocationService;
+use App\Services\Front\TerminalLocationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CertificationController extends Controller
 {
-    private $locationService;
+    private $terminalLocationService;
 
-    public function __construct(LocationService $locationService)
+    public function __construct(TerminalLocationService $terminalLocationService)
     {
-        $this->locationService = $locationService;
+        $this->terminalLocationService = $terminalLocationService;
     }
 
     public function getCreate()
@@ -33,8 +34,11 @@ class CertificationController extends Controller
             throw new NotFoundHttpException('許可しないHTTPメソッドです');
         }
 
-        $this->locationService->storeLocation($request->all());
+        $inputs = $request->all();
+        $inputs['user_id'] = Auth::id();
 
-        return $request;
+        $this->terminalLocationService->store($inputs);
+
+        return response()->json($request);
     }
 }

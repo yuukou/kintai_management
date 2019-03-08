@@ -10,3 +10,6 @@
 define('USER_STATUS_TEMP', 1);
 define('USER_STATUS_ENTER', 2);
 define('USER_STATUS_WITHDRAWAL', 3);
+
+// 管理画面URLの接頭辞
+define('ADMIN_PREFIX', 'ls_kintai_system');

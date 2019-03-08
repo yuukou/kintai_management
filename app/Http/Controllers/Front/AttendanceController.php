@@ -12,7 +12,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
 use App\Services\Front\AttendanceService;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AttendanceController extends Controller
 {
@@ -23,15 +25,20 @@ class AttendanceController extends Controller
         $this->attendanceService = $attendanceService;
     }
 
-    public function getTop()
+    public function getIndex()
     {
         return view('front.setup.create');
     }
 
-    public function postStoreArrive(User $user, AttendanceRequest $request)
+    public function postStoreArrive(AttendanceRequest $request)
     {
-        $attendance = $request->input('attendance');
-        $this->attendanceService->storeArrive($user);
+        if (! \Request::ajax()) {
+            throw new NotFoundHttpException('許可しないHTTPメソッドです');
+        }
+
+        $attendance = $request['attendance'];
+        $user = Auth::user();
+        $this->attendanceService->store Arrive($user);
 
         return Redirect::route('storeComplete', [$attendance, $user->id]);
     }
