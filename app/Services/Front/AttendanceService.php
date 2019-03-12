@@ -9,7 +9,6 @@
 namespace App\Services\Front;
 
 use App\Attendance;
-use App\Exceptions\DuplicateException;
 use App\Services\Service;
 use Carbon\Carbon;
 
@@ -20,20 +19,33 @@ class AttendanceService extends Service
     public function storeArrive($user)
     {
         $info = $this->getInfo($user);
+        $date = $info['date'];
+        $shainId = $info['shainId'];
 
-//        $this->checkArriveDuplication($attendance);
-        $this->store($info['date'], $info['shainId']);
+        $inputs = [
+            'user_id' => $shainId,
+            'date' => $date,
+            'arrive_at' => $date,
+        ];
+        Attendance::create($inputs);
+
+        //スラックの勤怠チャンネルに出社通知を行う。
         $this->arrive($info['shainName']);
         $this->send();
     }
 
-    public function storeLeave($user, $attendance)
+    public function storeLeave($user)
     {
         $info = $this->getInfo($user);
+        $date = $info['date'];
+        $shainId = $info['shainId'];
         $attendanceQuery = $this->getUserQuery($info['date'], $info['shainId']);
 
-//        $this->checkLeaveDuplication($attendance, $attendanceQuery);
-        $this->update($attendanceQuery, $info['date'], $info['shainId']);
+        $inputs = $attendanceQuery->first()->toArray();
+        $inputs['leave_at'] = $date;
+        Attendance::updateOrCreate(['user_id' => $shainId], $inputs);
+
+        //スラックの勤怠チャンネルに退社通知を行う。
         $this->leave($info['shainName']);
         $this->send();
     }
@@ -50,54 +62,26 @@ class AttendanceService extends Service
         return $this->getUserQuery($info['date'], $info['shainId'])->whereNotNull('leave_at')->exists();
     }
 
-    private function store($date, $shainId)
+    public function checkArriveDuplication($userId)
     {
-        $inputs = [
-            'user_id' => $shainId,
-            'date' => $date,
-            'arrive_at' => $date,
-        ];
-        Attendance::create($inputs);
-    }
-
-    private function update($attendanceQuery, $date, $shainId)
-    {
-        $inputs = $attendanceQuery->first()->toArray();
-        $inputs['leave_at'] = $date;
-        Attendance::updateOrCreate(['user_id' => $shainId], $inputs);
-    }
-
-    private function checkArriveDuplication($attendance)
-    {
-        if ($attendance == 'arrive') {
-            throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
+        $today = Carbon::today();
+        $arriveAttendanceQuery = Attendance::where('user_id', '=', $userId)
+            ->where('arrive_at', '=', $today);
+        if ($arriveAttendanceQuery->exists()) {
+            return true;
         }
+        return false;
     }
 
-    private function checkLeaveDuplication($attendance, $attendanceQuery)
+    public function checkLeaveDuplication($userId)
     {
-        $leaveAttendanceQuery = $attendanceQuery->whereNotNull('leave_at');
-        if ($attendance == 'leave' && $leaveAttendanceQuery->exists()) {
-            throw new DuplicateException('本日の退社処理は既に行われています😌😌😌');
+        $today = Carbon::today();
+        $leaveAttendanceQuery = Attendance::where('user_id', '=', $userId)
+            ->where('leave_at', '=', $today);
+        if ($leaveAttendanceQuery->exists()) {
+            return true;
         }
-    }
-
-    public function getAttendanceTime($user, $attendance)
-    {
-        $info = $this->getInfo($user);
-        $attendanceQuery = $this->getUserQuery($info['date'], $info['shainId']);
-
-        $inputs = $attendanceQuery->first()->toArray();
-
-        if ($attendance == 'arrive') {
-            $time = $inputs['arrive_at'];
-            return $time;
-        } elseif ($attendance == 'leave') {
-            $time = $inputs['leave_at'];
-            return $time;
-        } else {
-            return '';
-        }
+        return false;
     }
 
     private function getInfo($user)

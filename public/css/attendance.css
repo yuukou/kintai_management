@@ -9,7 +9,7 @@ body .container.attendance {
   position: relative;
 }
 
-body .container.attendance .btns {
+body .container.attendance .btn_wrapper {
   display: inline-block;
   position: absolute;
   top: 50%;
@@ -18,12 +18,7 @@ body .container.attendance .btns {
   transform: translate(-50%, -50%);
 }
 
-body .container.attendance .btns .btn_wrapper {
-  display: inline-block;
-  float: left;
-}
-
-body .container.attendance .btns .btn_wrapper .btn {
+body .container.attendance .btn_wrapper .btn {
   font-size: 80px;
   background-color: grey;
   display: inline-block;
@@ -42,19 +37,19 @@ body .container.attendance .btns .btn_wrapper .btn {
   border: none;
 }
 
-body .container.attendance .btns .btn_wrapper .btn.on_btn {
+body .container.attendance .btn_wrapper .btn.on_btn {
   background-image: linear-gradient(45deg, #709dff 0%, #91fdb7 100%);
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.3), 0 3px 3px rgba(0, 0, 0, 0.3);
   border-bottom: solid 3px #549fa9;
 }
 
-body .container.attendance .btns .btn_wrapper .btn.on_btn:hover {
+body .container.attendance .btn_wrapper .btn.on_btn:hover {
   -webkit-transform: rotate(20deg);
   transform: rotate(20deg);
   outline: none;
 }
 
-body .container.attendance .btns .btn_wrapper .btn:active {
+body .container.attendance .btn_wrapper .btn:active {
   border: none;
   outline: none;
   -webkit-transform: translateY(1px);
@@ -62,7 +57,7 @@ body .container.attendance .btns .btn_wrapper .btn:active {
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
 }
 
-body .container.attendance .btns .btn_wrapper .arrive_description {
+body .container.attendance .btn_wrapper .arrive_description {
   margin: 0;
   font-size: 25px;
   width: 200px;
@@ -70,7 +65,7 @@ body .container.attendance .btns .btn_wrapper .arrive_description {
   padding-top: 30px;
 }
 
-body .container.attendance .btns .btn_wrapper .leave_description {
+body .container.attendance .btn_wrapper .leave_description {
   margin: 0;
   font-size: 25px;
   width: 200px;
@@ -78,12 +73,12 @@ body .container.attendance .btns .btn_wrapper .leave_description {
   padding-top: 30px;
 }
 
-body .container.attendance .btns .good_bye_description {
+body .container.attendance .good_bye_description {
   margin: 0;
   font-size: 35px;
   width: 600px;
   text-align: center;
-  padding-top: 30px;
+  padding-top: 100px;
 }
 
 body .container.attendance .clock {

@@ -8,6 +8,7 @@
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link href="https://fonts.googleapis.com/css?family=Kosugi+Maru&amp;subset=japanese" rel="stylesheet">
     <link rel="stylesheet" href="{{ mix('/css/attendance.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/mypage.css') }}">

@@ -42,9 +42,8 @@ Route::group(['as' => 'front::'], function (){
         //出退勤処理
         Route::group(['prefix' => 'attendance', 'as' => 'attendance::'], function () {
             Route::get('', ['uses' => 'AttendanceController@getIndex'])->name('index');
-            Route::post('/arrive', ['uses' => 'AttendanceController@postStoreArrive'])->name('postStoreArrive');
-            Route::post('/leave', ['uses' => 'AttendanceController@postStoreLeave'])->name('postStoreLeave');
-            Route::get('/complete/{user}', ['uses' => 'AttendanceController@getStoreComplete'])->name('storeComplete');
+            Route::post('/arrive', ['uses' => 'AttendanceController@postStoreArrive'])->name('post-store-arrive');
+            Route::post('/leave', ['uses' => 'AttendanceController@postStoreLeave'])->name('post-store-leave');
         });
     });
 });

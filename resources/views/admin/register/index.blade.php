@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     @if(Session::has('result_message'))
-        @include('admin.elements.form.success_alert')
+        @include('admin.elements.form.success_session_alert')
     @endif
     <div class="row justify-content-center">
         <div class="col-md-8">

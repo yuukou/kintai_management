@@ -5,37 +5,56 @@ $(function () {
 
   btn.on('click', function () {
     var attendance = $(this).attr("id");
-    if (confirmAttendance(attendance)) {
-      $.ajax({
-        url: "/attendance/" + attendance,
-        type: "post",
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        async: true,
-        dataType: 'json',
-        data: {
-          attendance:attendance,
-        },
-      })
+    // if (confirmAttendance(attendance)) {
+      // $.ajax({
+      //   url: "/attendance/" + attendance,
+      //   type: "post",
+      //   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+      //   async: true,
+      //   dataType: 'json',
+      //   data: {
+      //     attendance:attendance,
+      //   },
+      // })
+      //
+      //  .done(function (data) {
+      //     console.log(data);
+      //    $('.attendance_complete').fadeIn('slow', function () {
+      //      add(data['attendance']);
+      //      $(this).delay(5000).fadeOut('slow');
+      //    });
+      //   })
+      //  .fail(function (jqXHR, textStatus, errorThrown) {
+      //    alert("出退勤処理に失敗しました。");
+      //  });
 
-       .done(function (data) {
-          console.log(data);
-          $('.address1').text(data['address']);
-        })
-       .fail(function (jqXHR, textStatus, errorThrown) {
-         alert("位置情報の登録に失敗しました。");
-       });
-    }
+      return confirmAttendance(attendance);
+    // }
   });
 
+  function add(attendance) {
+    var japaneseAttendance = checkWchichAttendance(attendance);
+    $('.attendance_complete').prepend('<div class="row">\n' +
+        '    <div class="col-md-12">\n' +
+        '        <div class="form-group">\n' +
+        '            <div class="alert alert-success">' + japaneseAttendance + '処理が完了しました。</div>\n' +
+        '        </div>\n' +
+        '    </div>\n' +
+        '</div>');
+  }
+
   function confirmAttendance(attendance) {
-    var japanese = '';
+    var japaneseAttendance = checkWchichAttendance(attendance);
+    return confirm(japaneseAttendance + 'を記録します。本当によろしいですか？');
+  }
+
+  function checkWchichAttendance(attendance) {
     if (attendance == 'arrive') {
-      japanese = '出社';
+      return '出社';
     }
     if (attendance == 'leave') {
-      japanese = '退社';
+      return '退社';
     }
-    return confirm(japanese + 'を記録します。本当によろしいですか？');
   }
 });
 
