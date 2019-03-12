@@ -8,12 +8,13 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Exceptions\DuplicateException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
 use App\Services\Front\AttendanceService;
-use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AttendanceController extends Controller
@@ -27,7 +28,8 @@ class AttendanceController extends Controller
 
     public function getIndex()
     {
-        return view('front.setup.create');
+
+        return view('front.attendances.index');
     }
 
     public function postStoreArrive(AttendanceRequest $request)
@@ -36,24 +38,40 @@ class AttendanceController extends Controller
             throw new NotFoundHttpException('許可しないHTTPメソッドです');
         }
 
-        $attendance = $request['attendance'];
         $user = Auth::user();
-        $this->attendanceService->store Arrive($user);
+        $userId = $user->id;
+        //もし、既にその日の出社処理を終了している時に、再度アクセスがあった場合は、
+        //既に出社処理を終えている旨をユーザーに伝え、処理を途中で終了する。
+        if ($this->attendanceService->checkArriveDuplication($userId)) {
+            throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
+        }
 
-        return Redirect::route('storeComplete', [$attendance, $user->id]);
+        $attendance = $request['attendance'];
+        $this->attendanceService->storeArrive($user);
+        Session::flash('attendance_complete', '出社処理が完了致しました。');
+        return Redirect::route('front::attendance::index', [$attendance]);
     }
 
-    public function postStoreLeave(User $user, AttendanceRequest $request)
+    public function postStoreLeave(AttendanceRequest $request)
     {
-        $attendance = $request->input('attendance');
-        $this->attendanceService->storeLeave($user, $attendance);
+        if (! \Request::ajax()) {
+            throw new NotFoundHttpException('許可しないHTTPメソッドです');
+        }
 
-        return Redirect::route('storeComplete', [$attendance, $user->id]);
-    }
+        //もし、既にその日の退社処理を終了している時に、再度アクセスがあった場合は
+        //既に退社処理を終えている旨をユーザーに伝え、処理を途中で終了する。
 
-    public function getStoreComplete($attendance, User $user)
-    {
-        $time = $this->attendanceService->getAttendanceTime($user, $attendance);
-        return view('attendance_complete')->with(['attendance' => $attendance, 'name' => $user->name, 'time' => $time]);
+        $user = Auth::user();
+        $userId = $user->id;
+        //もし、既にその日の退社処理を終了している時に、再度アクセスがあった場合は、
+        //既に退社処理を終えている旨をユーザーに伝え、処理を途中で終了する。
+        if ($this->attendanceService->checkLeaveDuplication($userId)) {
+            throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
+        }
+        $attendance = $request['attendance'];
+        $this->attendanceService->storeLeave($user);
+        Session::flash('attendance_complete', '退社処理が完了致しました。');
+
+        return Redirect::route('front::attendance::index', ['attendance' => $attendance]);
     }
 }

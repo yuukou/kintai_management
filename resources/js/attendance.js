@@ -19,10 +19,10 @@ $(function () {
 
        .done(function (data) {
           console.log(data);
-          $('.address1').text(data['address']);
+          $('.address1').text();
         })
        .fail(function (jqXHR, textStatus, errorThrown) {
-         alert("位置情報の登録に失敗しました。");
+         alert("出退勤処理に失敗しました。");
        });
     }
   });
