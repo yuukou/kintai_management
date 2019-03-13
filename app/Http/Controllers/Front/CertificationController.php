@@ -11,7 +11,9 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CertificationRequest;
 use App\Services\Front\TerminalLocationService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CertificationController extends Controller
@@ -28,8 +30,10 @@ class CertificationController extends Controller
         return view('front.setup.create');
     }
 
-    public function postEntry(CertificationRequest $request)
+    public function postEntry(Request $request)
+//    public function postEntry(CertificationRequest $request)
     {
+//        Log::info('とどきました。');
         if (! \Request::ajax()) {
             throw new NotFoundHttpException('許可しないHTTPメソッドです');
         }
@@ -39,6 +43,6 @@ class CertificationController extends Controller
 
         $this->terminalLocationService->store($inputs);
 
-        return response()->json($request);
+        return json_encode($request);
     }
 }

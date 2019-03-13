@@ -18,18 +18,24 @@ class CertificationRequest extends Request
     public function rules()
     {
         $rules = [
-            'longitude' => [
-                'float',
-                'required'
-            ],
+            // 緯度
             'latitude' => [
-                'float',
-                'required'
+                'required',
+                'numeric',
+                'regex:/^[-]?((([0-8]?[0-9])(\.[0-9]{6}))|90(\.0{6})?)$/'
             ],
+            // 経度
+            'longitude' => [
+                'required',
+                'numeric',
+                'regex:/^[-]?(((([1][0-7][0-9])|([0-9]?[0-9]))(\.[0-9]{6}))|180(\.0{6})?)$/'
+            ],
+            //住所
             'address' => [
                 'string',
                 'required'
             ],
+            //端末情報
             'terminal' => [
                 'string',
                 'required'

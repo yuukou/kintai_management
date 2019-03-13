@@ -10,12 +10,18 @@ namespace App\Services\Front;
 
 use App\Services\Service;
 use App\TerminalLocation;
+use Illuminate\Support\Facades\Log;
 
 class TerminalLocationService extends Service
 {
     public function store(array $inputs)
     {
-        TerminalLocation::create($inputs);
+        try {
+            TerminalLocation::create($inputs);
+            Log::info('端末位置情報の登録完了。');
+        } catch (\Throwable $e) {
+            Log::error('端末位置情報の登録失敗。');
+        }
     }
 
     public function getAddress($userId)

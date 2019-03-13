@@ -2,7 +2,7 @@ $(function () {
     $('.js_set_up_btn').click(function (e) {
 
         //Userエージェント情報を取得する処理
-        let browser = UAParser().browser;
+        let browser = UAParser().browser.name;
 
         e.preventDefault();
         // $('div.hereArea p.errorMsg').text('');
