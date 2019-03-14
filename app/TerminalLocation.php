@@ -43,6 +43,7 @@ class TerminalLocation extends Model
         'longitude',
         'latitude',
         'terminal',
+        'workspace_type',
         'created_at',
         'updated_at',
     ];

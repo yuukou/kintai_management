@@ -17,9 +17,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmW2NNjAG61yBadklIPn0jNaIeZPeE-l4"></script>
     <script src="{{ mix('/js/attendance.js') }}" type="text/javascript"></script>
-    <script src="{{ mix('/js/top_redirect.js') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/clock.js') }}" type="text/javascript"></script>
-    {{--<script src="{{ mix('/js/set_up.js') }}" type="text/javascript"></script>--}}
     <script src="{{ mix('/js/mypage.js') }}" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@0/dist/ua-parser.min.js"></script>
     <!--[if lt IE 9]>

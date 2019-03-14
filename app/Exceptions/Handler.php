@@ -66,7 +66,7 @@ class Handler extends ExceptionHandler
         if ($this->isHttpException($e)) {
             /** @var \Symfony\Component\HttpKernel\Exception\HttpException $e */
             if ($e->getStatusCode() == 404) {
-                return response()->view('front.errors.404', ['exception' => $e, 'message' => trans('front/message.errors.404')], $e->getStatusCode());
+                return response()->view('errors.404', ['exception' => $e, 'message' => trans('front/message.errors.404')], $e->getStatusCode());
             }
         }
 

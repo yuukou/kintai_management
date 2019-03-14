@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['as' => 'front::'], function (){
+Route::group(['as' => 'front::', 'middleware' => ['web']], function (){
     Route::group(['prefix' => 'register','as' => 'register::'], function (){
         Route::get('/complete/{token}', ['uses' => 'UserController@getRegisterComplete'])->name('complete');
         // 仮登録トークン期限切れ
@@ -28,15 +28,14 @@ Route::group(['as' => 'front::'], function (){
     });
 
     //マイページ
-    Route::group(['middleware' => 'auth.very_basic', 'prefix' => ''], function() {
+//    Route::group(['middleware' => 'auth.very_basic', 'prefix' => ''], function() {
         Route::group(['prefix' => 'mypage', 'as' => 'mypage::'], function () {
             Route::get('/', ['uses' => 'MypageController@getIndex'])->name('index');
         });
 
         //端末位置情報の登録処理
-        Route::group(['prefix' => 'entry', 'as' => 'entry::'], function () {
-            Route::get('/', ['uses' => 'CertificationController@getCreate'])->name('entry');
-            Route::post('/', [ 'uses' => 'CertificationController@postEntry'])->name('post-entry');
+        Route::group(['prefix' => 'terminal-location', 'as' => 'terminalLocation::'], function () {
+            Route::post('/', [ 'uses' => 'TerminalLocationController@postIndex'])->name('post-index');
         });
 
         //出退勤処理
@@ -45,5 +44,4 @@ Route::group(['as' => 'front::'], function (){
             Route::post('/arrive', ['uses' => 'AttendanceController@postStoreArrive'])->name('post-store-arrive');
             Route::post('/leave', ['uses' => 'AttendanceController@postStoreLeave'])->name('post-store-leave');
         });
-    });
 });

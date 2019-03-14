@@ -27,9 +27,4 @@ class MypageController extends Controller
         $addressList = $this->terminalLocationService->getAddress($user->id);
         return view('front.mypage.index', ['user' => $user ,'addressList' => $addressList]);
     }
-
-    public function getEdit()
-    {
-        return view('front.mypage.edit');
-    }
 }

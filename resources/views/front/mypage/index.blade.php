@@ -14,19 +14,19 @@
                     <td>{{ $user->email }}</td>
                 </tr>
                 <tr>
-                    <th>位置情報１</th>
-                    @if(isset($addressList[0]))
-                        <td class="address1">{{ $addressList[0] }}</td>
+                    <th>主要住所</th>
+                    @if(isset($addressList['mainAddress']))
+                        <td id={{ MAIN_WORKSPACE }}>{{ $addressList['mainAddress'] }}</td>
                     @else
-                        <td class="address1"><a class="js_set_up_btn btn-square-so-pop">位置情報１を登録する</a></td>
+                        <td id={{ MAIN_WORKSPACE }}><a class="js_set_up_btn btn-square-so-pop">位置情報１を登録する</a></td>
                     @endif
                 </tr>
                 <tr>
-                    <th>位置情報２</th>
-                    @if(isset($addressList[1]))
-                        <td class="address2">{{ $addressList[1] }}</td>
+                    <th>サブ住所</th>
+                    @if(isset($addressList['subAddress']))
+                        <td id={{ SUB_WORKSPACE }}>{{ $addressList['subAddress'] }}</td>
                     @else
-                        <td class="address2"><a class="js_set_up_btn btn-square-so-pop">位置情報２を登録する</a></td>
+                        <td id={{ SUB_WORKSPACE }}><a class="js_set_up_btn btn-square-so-pop">位置情報２を登録する</a></td>
                     @endif
                 </tr>
                 <tr>

@@ -1,6 +1,7 @@
 $(function () {
-    $('.js_set_up_btn').click(function (e) {
 
+    $('.js_set_up_btn').click(function (e) {
+        let workspaceType = $(this).parent().attr('id');
         //Userエージェント情報を取得する処理
         let browser = UAParser().browser.name;
 
@@ -56,24 +57,30 @@ $(function () {
                     if (confirm(address + 'で位置情報を登録します。\n本当によろしいでしょうか？')) {
                         //ajaxでデータ送信
                         $.ajax({
-                            url: "/entry",
+                            url: "/terminal-location",
                             type: "post",
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             async: true,
                             dataType: 'json',
                             data: {
-                                //位置情報（緯度・経度）
+                                //緯度
                                 longitude:longitude,
+                                //経度
                                 latitude:latitude,
                                 // 住所
                                 address: address,
                                 //端末情報としてブラウザ情報を使用する
                                 terminal: browser,
+                                //勤務先種別（0or1）
+                                workspace_type:workspaceType,
                             },
                         })
                             .done(function (data) {
                                 console.log(data);
-                                $('.address1').text(data['address']);
+                                console.log(data['address']);
+                                let addressType = $('#' + data['workspace_type']);
+                                console.log(addressType);
+                                addressType.text(data['address']);
                             })
                             .fail(function (jqXHR, textStatus, errorThrown) {
                                 alert("位置情報の登録に失敗しました。");
@@ -84,5 +91,5 @@ $(function () {
                 }
             );
         }
-    });
+     });
 });

@@ -8,8 +8,15 @@
 
 namespace App\Http\Requests;
 
-class CertificationRequest extends Request
+use Illuminate\Http\JsonResponse;
+
+class TerminalLocationRequest extends Request
 {
+    public function authorize()
+    {
+        return true;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,13 +29,13 @@ class CertificationRequest extends Request
             'latitude' => [
                 'required',
                 'numeric',
-                'regex:/^[-]?((([0-8]?[0-9])(\.[0-9]{6}))|90(\.0{6})?)$/'
+                'regex:/^[0-8]?[0-9]\.?[0-9]{0,15}|90\.0{0,15}$/',
             ],
             // 経度
             'longitude' => [
                 'required',
                 'numeric',
-                'regex:/^[-]?(((([1][0-7][0-9])|([0-9]?[0-9]))(\.[0-9]{6}))|180(\.0{6})?)$/'
+                'regex:/^([1][0-7][0-9]|[0-9]?[0-9])\.[0-9]{0,15}|180\.0{0,15}?$/'
             ],
             //住所
             'address' => [
@@ -39,7 +46,12 @@ class CertificationRequest extends Request
             'terminal' => [
                 'string',
                 'required'
-            ]
+            ],
+            //メインかサブか
+            'workspace_type' => [
+                'required',
+                'boolean',
+            ],
         ];
         return $rules;
     }
@@ -52,5 +64,20 @@ class CertificationRequest extends Request
     public function attributes()
     {
         return trans('form.attributes');
+    }
+
+    # responseを上書きする
+    # ajax,jsonで返答時以外は親に流す
+    /**
+     * @param array $errors
+     * @return JsonResponse
+     */
+    public function response(array $errors)
+    {
+        if ($this->ajax() || $this->wantsJson()) {
+            return new JsonResponse(['message' => '端末位置情報の登録に問題がありました。','errors'=>$errors], 422);
+        }
+
+        parent::response($errors);
     }
 }

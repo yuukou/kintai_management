@@ -13,3 +13,7 @@ define('USER_STATUS_WITHDRAWAL', 3);
 
 // 管理画面URLの接頭辞
 define('ADMIN_PREFIX', 'ls_kintai_system');
+
+//WorkSpace
+define('MAIN_WORKSPACE', 0);
+define('SUB_WORKSPACE', 1);

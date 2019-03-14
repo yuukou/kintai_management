@@ -19,6 +19,7 @@ class CreateTerminalLocationsTable extends Migration
             $table->string('address');
             $table->decimal('longitude',9, 6);
             $table->decimal('latitude', 9, 6);
+            $table->smallInteger('workspace_type');
             $table->string('terminal');
             $table->timestamps();
         });
