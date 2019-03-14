@@ -66,7 +66,7 @@ class AttendanceService extends Service
     {
         $today = Carbon::today();
         $arriveAttendanceQuery = Attendance::where('user_id', '=', $userId)
-            ->where('arrive_at', '=', $today);
+            ->where('date', '=', $today)->whereNotNull('arrive_at');
         if ($arriveAttendanceQuery->exists()) {
             return true;
         }
@@ -77,7 +77,7 @@ class AttendanceService extends Service
     {
         $today = Carbon::today();
         $leaveAttendanceQuery = Attendance::where('user_id', '=', $userId)
-            ->where('leave_at', '=', $today);
+            ->where('date', '=', $today)->whereNotNull('leave_at');
         if ($leaveAttendanceQuery->exists()) {
             return true;
         }

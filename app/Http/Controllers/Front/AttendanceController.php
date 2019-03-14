@@ -15,7 +15,6 @@ use App\Services\Front\AttendanceService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AttendanceController extends Controller
 {
@@ -28,54 +27,35 @@ class AttendanceController extends Controller
 
     public function getIndex()
     {
+        $userId = Auth::id();
+
         if (! Session::exists('arrivedFlg') || ! Session::exists('leftFlg'))
         {
+            if ($this->attendanceService->checkArriveDuplication($userId)) {
+                throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
+            }
+
+            if ($this->attendanceService->checkLeaveDuplication($userId)) {
+                throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
+            }
+
             Session::put(['arrivedFlg' => false, 'leftFlg' => false]);
+        }
+
+        if (Session::exists('arrivedFlg')) {
+            if (! $this->attendanceService->checkArriveDuplication($userId)) {
+                Session::forget('arrivedFlg');
+            }
+        }
+
+        if (Session::exists('leftFlg')) {
+            if (! $this->attendanceService->checkLeaveDuplication($userId)) {
+                Session::forget('leftFlg');
+            }
         }
 
         return view('front.attendances.index');
     }
-
-    //ajax用
-//    public function postStoreArrive(AttendanceRequest $request)
-//    {
-//        if (! \Request::ajax()) {
-//            throw new NotFoundHttpException('許可しないHTTPメソッドです');
-//        }
-//
-//        $user = Auth::user();
-//        $userId = $user->id;
-//        //もし、既にその日の出社処理を終了している時に、再度アクセスがあった場合は、
-//        //既に出社処理を終えている旨をユーザーに伝え、処理を途中で終了する。
-//        if ($this->attendanceService->checkArriveDuplication($userId)) {
-//            throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
-//        }
-//
-//        $this->attendanceService->storeArrive($user);
-//        return $request;
-//    }
-
-    //ajax用
-//    public function postStoreLeave(AttendanceRequest $request)
-//    {
-//        if (! \Request::ajax()) {
-//            throw new NotFoundHttpException('許可しないHTTPメソッドです');
-//        }
-//
-//        //もし、既にその日の退社処理を終了している時に、再度アクセスがあった場合は
-//        //既に退社処理を終えている旨をユーザーに伝え、処理を途中で終了する。
-//
-//        $user = Auth::user();
-//        $userId = $user->id;
-//        //もし、既にその日の退社処理を終了している時に、再度アクセスがあった場合は、
-//        //既に退社処理を終えている旨をユーザーに伝え、処理を途中で終了する。
-//        if ($this->attendanceService->checkLeaveDuplication($userId)) {
-//            throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
-//        }
-//
-//        $this->attendanceService->storeLeave($user);
-//        return $request;
-//    }
 
     //submitで送信した用
     public function postStoreArrive(AttendanceRequest $request)

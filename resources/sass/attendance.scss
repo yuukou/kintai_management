@@ -91,7 +91,11 @@ body {
       font-weight: bolder;
       text-align: center;
       color: black;
-      padding-top: 120px;
+      padding-top: 50px;
+    }
+
+    .attendance_result_message_wrapper {
+      padding-top: 50px;
     }
   }
 
@@ -129,6 +133,8 @@ body {
     -ms-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    width: 800px;
+    text-align: center;
   }
 
   .shain_only {
