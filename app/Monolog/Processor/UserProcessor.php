@@ -5,6 +5,9 @@
  */
 namespace App\Monolog\Processor;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 /**
  * ログにユーザー情報を出力できるようにする
  *
@@ -15,13 +18,13 @@ class UserProcessor
     public function __invoke(array $record)
     {
         try {
-            $record['extra']['login_id'] = \Sentinel::check() ? \Sentinel::getUser()->getUserId() : '';
+            $record['extra']['login_id'] = Auth::check() ? Auth::id() : '';
         } catch (\Throwable $e) {
             $record['extra']['login_id'] = $e->getMessage();
         }
 
         try {
-            $record['extra']['session_id'] = \Session::getId();
+            $record['extra']['session_id'] = Session::getId();
         } catch (\Throwable $e) {
             $record['extra']['session_id'] = $e->getMessage();
         }
