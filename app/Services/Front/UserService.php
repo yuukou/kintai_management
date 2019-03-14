@@ -8,24 +8,24 @@
 
 namespace App\Services\Front;
 
+use App\Services\SendMailService;
 use App\Services\UserService as CommonService;
 use App\Exceptions\TokenException;
 use App\Services\TokenService;
 use App\User;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Support\Facades\DB;
 
 class UserService extends CommonService
 {
-    private $tokenService;
-
-    public function __construct(TokenService $tokenService)
+    public function __construct(TokenService $tokenService, SendMailService $sendMailService)
     {
-        $this->tokenService = $tokenService;
+        parent::__construct($tokenService, $sendMailService);
     }
 
     public function update($token)
     {
-        $user = $this->getUserForToken($token);
+        $user = $this->getUserByToken($token);
 
         // 本登録対象のメルアドが使用済みならエラーにする
         $isAlreadyExistsEmail = User::query()->where('email', '=', $user->email)->where('status', '=', USER_STATUS_ENTER)->exists();
@@ -36,7 +36,6 @@ class UserService extends CommonService
         //本登録でステータスを更新、更新後は安全性とゴミデータになるためトークンを削除
         DB::transaction(function () use ($token, $user) {
             $user->update(['status' => USER_STATUS_ENTER]);
-
             $this->tokenService->deleteToken($token);
         });
     }

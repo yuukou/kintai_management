@@ -19,6 +19,7 @@ class CreateAttendancesTable extends Migration
             $table->date('date');
             $table->time('arrive_at');
             $table->time('leave_at')->nullable();
+            $table->softDeletes();
         });
     }
 

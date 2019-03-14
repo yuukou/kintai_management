@@ -79,7 +79,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapAdminRoutes()
     {
         // URL総当たり攻撃対策のため、prefixは長めにしている
-        Route::prefix('admin')
+        Route::prefix(ADMIN_PREFIX)
             ->middleware('web')
             ->namespace($this->namespace.'\Admin')
             ->group(base_path('routes/web_admin.php'));

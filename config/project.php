@@ -18,6 +18,16 @@ return [
             // 最大桁数
             'max_length' => 200,
         ],
+        'password' => [
+            //
+            'min_length' => 8,
+            'max_length' => 20,
+        ],
+        'password-' => [
+            //
+            'min_length' => 8,
+            'max_length' => 20,
+        ],
 
         'mail_auth_expire_time' => 24,
     ],

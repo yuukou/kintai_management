@@ -1,4 +1,4 @@
-@extends('front.layouts.default')
+@extends('layouts.default')
 @section('content')
     <div class="already_attendance">
         @if($exception->getMessage())

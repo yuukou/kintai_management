@@ -34,6 +34,34 @@ return [
     */
 
     'channels' => [
+        'custom_daily' => [
+            'driver' => 'stack',
+            'channels' => ['custom_daily_info', 'custom_daily_warn', 'custom_daily_error'],
+        ],
+        'custom_daily_info' => [
+            'driver' => 'custom',
+            'via' => App\Logging\CreateCustomLogger::class,
+            'path' => storage_path('logs/info.log'),
+            'days' => 0,
+            'level_min' => Monolog\Logger::DEBUG,
+            'level_max' => Monolog\Logger::NOTICE,
+        ],
+        'custom_daily_warn' => [
+            'driver' => 'custom',
+            'via' => App\Logging\CreateCustomLogger::class,
+            'path' => storage_path('logs/warn.log'),
+            'days' => 0,
+            'level_min' => Monolog\Logger::WARNING,
+            'level_max' => Monolog\Logger::WARNING,
+        ],
+        'custom_daily_error' => [
+            'driver' => 'custom',
+            'via' => App\Logging\CreateCustomLogger::class,
+            'path' => storage_path('logs/error.log'),
+            'days' => 0,
+            'level_min' => Monolog\Logger::ERROR,
+            'level_max' => Monolog\Logger::EMERGENCY,
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['daily'],

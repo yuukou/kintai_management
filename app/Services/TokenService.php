@@ -8,9 +8,8 @@
 
 namespace App\Services;
 
+use App\EmailToken;
 use App\Exceptions\TokenException;
-use App\Token;
-use Illuminate\Support\Facades\Redirect;
 
 class TokenService extends Service
 {
@@ -54,22 +53,12 @@ class TokenService extends Service
      */
     public function deleteToken($token)
     {
-        Token::query()->where('token', '=', $token)->delete();
+        EmailToken::query()->where('token', '=', $token)->delete();
     }
 
-    public function checkTokenEffectivity($token)
+    public function getEmailToken($token)
     {
-        $userToken = Token::where('token', '=', $token)->first();
-
-        if (is_null($userToken)){
-            throw new TokenException('tokenが有効でありません。');
-        } else {
-            $result = $this->checkToken($userToken);
-            if (! $result) {
-                return Redirect::route('front::entry-timeout-token');
-            }
-            return true;
-        }
+        return EmailToken::where('token', '=', $token)->first();
     }
 
     /**
@@ -79,7 +68,7 @@ class TokenService extends Service
      */
     public function extensionTokenTime($token)
     {
-        $userToken = Token::query()->where('token', '=', $token)->first();
+        $userToken = EmailToken::query()->where('token', '=', $token)->first();
 
         if(empty($userToken)){
             throw new TokenException('該当するtokenが存在しません。');
@@ -93,6 +82,6 @@ class TokenService extends Service
         // トークンの有効期限を延長する方式を採用
         $inputsToken['token'] = $token;
         $inputsToken['user_id'] = $userToken->user_id;
-        Token::create($inputsToken);
+        EmailToken::create($inputsToken);
     }
 }

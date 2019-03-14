@@ -11,6 +11,7 @@ namespace App\Http\Requests;
 
 class UserRequest extends Request
 {
+    use AuthorizeForRequest;
     /**
      * Get the validation rules that apply to the request.
      *
@@ -21,7 +22,7 @@ class UserRequest extends Request
         $rules = [
             'name' => [
                 'bail',
-                'bail',
+                'required',
                 'string',
                 'max:'.config('project.user.name.max_length'),
             ],
@@ -30,6 +31,13 @@ class UserRequest extends Request
                 'required',
                 'email',
                 'max:'.config('project.user.email.max_length'),
+            ],
+            'password' => [
+                'bail',
+                'required',
+                'min:'.config('project.user.password.min_length'),
+                'max:'.config('project.user.password.max_length'),
+                'confirmed',
             ],
         ];
 

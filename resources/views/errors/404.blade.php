@@ -1,4 +1,4 @@
-@extends('front.layouts.default')
+@extends('layouts.default')
 @section('content')
     <div class="not_found_exception">
         @if($exception->getMessage())
