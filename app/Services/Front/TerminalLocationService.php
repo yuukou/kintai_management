@@ -11,6 +11,7 @@ namespace App\Services\Front;
 use App\Services\Service;
 use App\TerminalLocation;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TerminalLocationService extends Service
 {
@@ -45,5 +46,37 @@ class TerminalLocationService extends Service
         $subAddress = $subAddressTerminalLocation['address'];
 
         return compact('mainAddress', 'subAddress');
+    }
+
+    /**
+     * @param $userId
+     * @param $terminal
+     * @return array
+     */
+    public function getOriginAddressLocation($userId, $terminal)
+    {
+        $terminalLocationQuery = TerminalLocation::where('user_id', '=', $userId)
+            ->where('terminal', '=', $terminal);
+
+        $subTerminalLocationQuery = $terminalLocationQuery;
+
+        if ($subTerminalLocationQuery->exists())
+        {
+            $terminalLocations = $terminalLocationQuery->get()->toArray();
+
+            $locations = [];
+            foreach ($terminalLocations as $terminalLocation) {
+                $inLocation = [
+                    'longitude' => $terminalLocation['longitude'],
+                    'latitude' => $terminalLocation['latitude'],
+                    'address' => $terminalLocation['address'],
+                 ];
+                $locations[] = $inLocation;
+            }
+
+            return $locations;
+        } else {
+            throw new NotFoundHttpException('該当するデータが存在しません。');
+        }
     }
 }

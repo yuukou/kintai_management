@@ -10,7 +10,9 @@ namespace App\Services\Front;
 
 use App\Attendance;
 use App\Services\Service;
+use App\TerminalLocation;
 use Carbon\Carbon;
+use phpDocumentor\Reflection\Types\Integer;
 
 class AttendanceService extends Service
 {
@@ -97,4 +99,45 @@ class AttendanceService extends Service
     {
         return Attendance::where('date', '=', $date)->where('user_id', '=', $shainId);
     }
+
+//    /**
+//     * 出退勤処理を行うユーザーが登録端末位置情報と同等であるかを判定する
+//     *
+//     * @param array $inputs
+//     * @return bool
+//     */
+//    public function checkTerminalLocation(array $inputs)
+//    {
+//        $terminalLocations = TerminalLocation::where('user_id', '=', $inputs['user_id'])->get()->toArray();
+//
+//        $destinationLongitude = $inputs['longitude'];
+//        $destinationLatitude = $inputs['latitude'];
+//        foreach ($terminalLocations as $terminalLocation) {
+//             $originLongitude = $terminalLocation['longitude'];
+//             $originLatitude = $terminalLocation['latitude'];
+//             $distance = $this->getPointsDistance($destinationLongitude, $destinationLatitude, $originLongitude, $originLatitude);
+//
+//             if ($distance <= 100) {
+//                 return true;
+//             }
+//        }
+//        return false;
+//    }
+
+//    /**
+//     * @param $lat1
+//     * @param $lng1
+//     * @param $lat2
+//     * @param $lng2
+//     * @return float
+//     */
+//    private function getPointsDistance($lat1, $lng1, $lat2, $lng2){
+//        $pi1 = pi();
+//        $lat1 = $lat1*$pi1/180;
+//        $lng1 = $lng1*$pi1/180;
+//        $lat2 = $lat2*$pi1/180;
+//        $lng2 = $lng2*$pi1/180;
+//        $deg = sin($lat1)*sin($lat2) + cos($lat1)*cos($lat2)*cos($lng2-$lng1);
+//        return round(6378140*(atan2(-$deg,sqrt(-$deg*$deg+1))+$pi1/2), 0);
+//    }
 }

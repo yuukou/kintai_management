@@ -12,7 +12,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TerminalLocationRequest;
 use App\Services\Front\TerminalLocationService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TerminalLocationController extends Controller

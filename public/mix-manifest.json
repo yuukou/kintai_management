@@ -4,7 +4,9 @@
     "/css/attendance.css": "/css/attendance.css?id=fcde99a443e5e384a0ac",
     "/css/mypage.css": "/css/mypage.css?id=6d261ada0c60b1d9da3a",
     "/css/register_complete.css": "/css/register_complete.css?id=1742088d151803b6b641",
-    "/js/attendance.js": "/js/attendance.js?id=8600af02867338f4bf0b",
+    "/js/attendance.js": "/js/attendance.js?id=5a91c226686fc865f6e9",
     "/js/clock.js": "/js/clock.js?id=43f7acc40608d967463f",
+    "/js/distance.js": "/js/distance.js?id=5c1ebce19dabb77fdd9a",
+    "/js/geolocation.js": "/js/geolocation.js?id=b1b4bbfdb689c30784d2",
     "/js/mypage.js": "/js/mypage.js?id=ea44637bc2b80600a2fc"
 }

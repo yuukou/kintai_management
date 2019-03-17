@@ -33,15 +33,16 @@ Route::group(['as' => 'front::', 'middleware' => ['web']], function (){
             Route::get('/', ['uses' => 'MypageController@getIndex'])->name('index');
         });
 
-        //端末位置情報の登録処理
-        Route::group(['prefix' => 'terminal-location', 'as' => 'terminalLocation::'], function () {
-            Route::post('/', [ 'uses' => 'TerminalLocationController@postIndex'])->name('post-index');
-        });
+    //端末位置情報の登録処理
+    Route::group(['prefix' => 'terminal-location', 'as' => 'terminalLocation::'], function () {
+        Route::post('/', [ 'uses' => 'TerminalLocationController@postIndex'])->name('post-index');
+    });
 
-        //出退勤処理
-        Route::group(['prefix' => 'attendance', 'as' => 'attendance::'], function () {
-            Route::get('', ['uses' => 'AttendanceController@getIndex'])->name('index');
-            Route::post('/arrive', ['uses' => 'AttendanceController@postStoreArrive'])->name('post-store-arrive');
-            Route::post('/leave', ['uses' => 'AttendanceController@postStoreLeave'])->name('post-store-leave');
-        });
+    //出退勤処理
+    Route::group(['prefix' => 'attendance', 'as' => 'attendance::'], function () {
+        Route::get('', ['uses' => 'AttendanceController@getIndex'])->name('index');
+        Route::post('/arrive', ['uses' => 'AttendanceController@postStoreArrive'])->name('post-store-arrive');
+        Route::post('/leave', ['uses' => 'AttendanceController@postStoreLeave'])->name('post-store-leave');
+        Route::post('/post-location', ['uses' => 'AttendanceController@postLocation'])->name('post-location');
+    });
 });

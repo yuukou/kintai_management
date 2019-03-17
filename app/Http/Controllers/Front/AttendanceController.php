@@ -10,19 +10,24 @@ namespace App\Http\Controllers\Front;
 
 use App\Exceptions\DuplicateException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AttendanceAjaxRequest;
 use App\Http\Requests\AttendanceRequest;
 use App\Services\Front\AttendanceService;
+use App\Services\Front\TerminalLocationService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AttendanceController extends Controller
 {
     private $attendanceService;
+    private $terminalLocationService;
 
-    public function __construct(AttendanceService $attendanceService)
+    public function __construct(AttendanceService $attendanceService, TerminalLocationService $terminalLocationService)
     {
         $this->attendanceService = $attendanceService;
+        $this->terminalLocationService = $terminalLocationService;
     }
 
     public function getIndex()
@@ -99,5 +104,37 @@ class AttendanceController extends Controller
 //        return Redirect::route('front::attendance::index', ['arrived_flg' => $arrived_flg, 'left_flg' => $left_flg]);
         return Redirect::route('front::attendance::index');
 //        return view('front.attendances.index', ['arrivedFlg' => $arrivedFlg, 'leftFlg' => $leftFlg]);
+    }
+
+    /**
+     * 登録済みの位置情報を取得し、現在地情報と一緒にjsに返す
+     *
+     * @param AttendanceAjaxRequest $ajaxRequest
+     * @return array
+     */
+    public function postLocation(AttendanceAjaxRequest $ajaxRequest)
+    {
+        if (! \Request::ajax()) {
+            throw new NotFoundHttpException('許可しないHTTPメソッドです');
+        }
+
+        $userId = Auth::id();
+        $terminal = $ajaxRequest['terminal'];
+        $originalAddressLocations = $this->terminalLocationService->getOriginAddressLocation($userId, $terminal);
+//        $data = [
+//            'originLongitude' => $location['longitude'],
+//            'originLatitude' =>  $location['latitude'],
+//            'destinationLongitude' => $ajaxRequest['longitude'],
+//            'destinationLatitude' => $ajaxRequest['latitude'],
+//        ];
+
+        $destinationAddressLocation = [
+            'longitude' => $ajaxRequest['longitude'],
+            'latitude' => $ajaxRequest['latitude'],
+            'address' => $ajaxRequest['address'],
+        ];
+
+        return compact('originalAddressLocations', 'destinationAddressLocation');
+        //ここでは、一定の範囲内に存在しなかった場合なので、一定の範囲内に存在していないという旨のエラーを返す。
     }
 }
