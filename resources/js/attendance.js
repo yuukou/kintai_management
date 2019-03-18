@@ -89,6 +89,8 @@ $(async function () {
             }
 
             if (confirm('現在地は' + address + 'でよろしいでしょうか？')) {
+              //ここでローディングモーダルを表示させる
+              $('#loader-bg').css('display', 'block');
               //ajaxでデータ送信
               $.ajax({
                 url: "/attendance/post-location",
@@ -111,18 +113,55 @@ $(async function () {
                     // console.log(data);
                     $.each(data.originalAddressLocations, async function (key, originalAddressLocation) {
                       let distance = await $(this)  .getDistance(originalAddressLocation, data.destinationAddressLocation);
-                      // if (await distance <= 1000) {
-                      //   console.log('勤怠処理が可能です。');
-                      // } else {
-                      //   console.log('勤怠処理を行えません。');
-                      // }
+                      distance = 900;
+                      if (await distance <= 1000) {
+                        let attendance = $('button').attr('id');
+                        $.ajax({
+                          url: "/attendance/" + attendance,
+                          type: "post",
+                          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                          async: true,
+                          dataType: 'json',
+                          data: {
+                            //出退勤の情報
+                            attendance: attendance
+                          },
+                        })
+                            .done(function (data) {
+                              //ローディングモーダルを非表示にする。
+                              $('#loader-bg').css('display', 'none');
+                              if (attendance === 'arrive') {
+                                $('.btn_wrapper').html(
+                                    "<button class=\"btn on_btn js_attendance_btn\" id=\"leave\" type=\"button\">🌚</button>" +
+                                    // "{{ Form::button(\\'🌚\\', [\\'class\\' => \"btn on_btn js_attendance_btn\", \\'id\\' => \\'leave\\']) }}" +
+                                    "<p class=\"arrive_description\">退社</p>"
+                                );
+                              }
+                              else if (attendance === 'leave') {
+                                $('.btn_wrapper').html(
+                                    "<p class=\"good_bye_description\">本日も一日お疲れ様でした👼👼👼</p>"
+                                );
+                              } else {
+                                $('.btn_wrapper').html(
+                                    "<div>エラーです。運営にお問い合わせください。</div>"
+                                );
+                              }
+                              //現状はページ全体をリロードしているが、部分的に更新するほうが良い
+                              location.reload();
+                            })
+                            .fail(function () {
+
+                            })
+
+                      } else {
+                        console.log('勤怠処理を行えません。');
+                      }
                     });
                   })
                   .fail(function (jqXHR, textStatus, errorThrown) {
                     alert("位置情報の登録に失敗しました。");
                   });
             }
-
             return false;
           }
       );

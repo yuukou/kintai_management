@@ -32,6 +32,7 @@ class AttendanceController extends Controller
 
     public function getIndex()
     {
+//        Session::forget('arrivedFlg', 'leftFlg');
         $userId = Auth::id();
 
         if (! Session::exists('arrivedFlg') || ! Session::exists('leftFlg'))
@@ -65,6 +66,10 @@ class AttendanceController extends Controller
     //submitで送信した用
     public function postStoreArrive(AttendanceRequest $request)
     {
+        if (! \Request::ajax()) {
+            throw new NotFoundHttpException('許可しないHTTPメソッドです');
+        }
+
         $user = Auth::user();
         $userId = $user->id;
         //もし、既にその日の出社処理を終了している時に、再度アクセスがあった場合は、
@@ -80,12 +85,19 @@ class AttendanceController extends Controller
         Session::put(compact('arrivedFlg', 'leftFlg'));
         Session::flash('result_message', '出社処理が完了致しました。');
 //        return view('front.attendances.index', ['arrivedFlg' => $arrivedFlg, 'leftFlg' => $leftFlg]);
-        return Redirect::route('front::attendance::index');
+//        $attendance = $request['attendance'];
+//        return $attendance;
+
+        return $request;
     }
 
     //submitで送信した用
     public function postStoreLeave(AttendanceRequest $request)
     {
+        if (! \Request::ajax()) {
+            throw new NotFoundHttpException('許可しないHTTPメソッドです');
+        }
+
         $user = Auth::user();
         $userId = $user->id;
         //もし、既にその日の退社処理を終了している時に、再度アクセスがあった場合は、
@@ -102,8 +114,10 @@ class AttendanceController extends Controller
         Session::flash('result_message', '退社処理が完了致しました。');
 
 //        return Redirect::route('front::attendance::index', ['arrived_flg' => $arrived_flg, 'left_flg' => $left_flg]);
-        return Redirect::route('front::attendance::index');
+//        return Redirect::route('front::attendance::index');
 //        return view('front.attendances.index', ['arrivedFlg' => $arrivedFlg, 'leftFlg' => $leftFlg]);
+
+        return $request;
     }
 
     /**

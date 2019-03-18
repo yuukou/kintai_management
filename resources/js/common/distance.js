@@ -41,7 +41,7 @@
                 console.log(distance);
             }
         });
-        console.log(distance);
+        // console.log(distance);
         return distance;
     }
 })($);
