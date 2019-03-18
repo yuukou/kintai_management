@@ -35,7 +35,15 @@ $(async function () {
   //           });
   //     }
 
+    var clickFlg = false;
+
   $('.js_attendance_btn').click(function (e) {
+      if (clickFlg) {
+          return false;
+      }
+
+      clickFlg = true;
+
     //Userエージェント情報を取得する処理
     let browser = UAParser().browser.name;
 
@@ -84,8 +92,9 @@ $(async function () {
                 }
               }
             } else {
-              console.log("位置情報取得は成功しましたが、住所情報の取得に失敗しました。");
-              $('div.hereArea p.errorMsg').text('位置情報が取得出来ませんでした。');
+                clickFlg = false;
+                console.log("位置情報取得は成功しましたが、住所情報の取得に失敗しました。");
+                $('div.hereArea p.errorMsg').text('位置情報が取得出来ませんでした。');
             }
 
             if (confirm('現在地は' + address + 'でよろしいでしょうか？')) {
@@ -145,23 +154,27 @@ $(async function () {
                                 $('.btn_wrapper').html(
                                     "<div>エラーです。運営にお問い合わせください。</div>"
                                 );
-                              }
+                             }
                               //現状はページ全体をリロードしているが、部分的に更新するほうが良い
                               location.reload();
+                              clickFlg = false;
                             })
                             .fail(function () {
-
+                                clickFlg = false;
                             })
 
                       } else {
-                        console.log('勤怠処理を行えません。');
+                          clickFlg = false;
+                          console.log('勤怠処理を行えません。');
                       }
                     });
                   })
                   .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert("位置情報の登録に失敗しました。");
+                      clickFlg = false;
+                      alert("位置情報の登録に失敗しました。");
                   });
             }
+            clickFlg = false;
             return false;
           }
       );
