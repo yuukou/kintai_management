@@ -35,7 +35,7 @@ class AttendanceController extends Controller
 //        Session::forget('arrivedFlg', 'leftFlg');
         $userId = Auth::id();
 
-        if (! Session::exists('arrivedFlg') || ! Session::exists('leftFlg'))
+        if (! Session::exists('arrivedFlg') && ! Session::exists('leftFlg'))
         {
             if ($this->attendanceService->checkArriveDuplication($userId)) {
                 throw new DuplicateException('本日の出社処理は既に行われています😌😌😌');
