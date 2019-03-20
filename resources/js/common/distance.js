@@ -38,7 +38,7 @@
                 // }
 
                 distance = response.rows[0].elements[0].distance.value; // 距離
-                console.log(distance);
+                // console.log(distance);
             }
         });
         // console.log(distance);

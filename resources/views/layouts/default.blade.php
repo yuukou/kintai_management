@@ -22,10 +22,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="{{ mix('/js/attendance.js') }}" type="text/javascript" defer></script>
-    <script src="{{ mix('/js/geolocation.js') }}" type="text/javascript" defer></script>
+    <script src="{{ mix('/js/common/geolocation.js') }}" type="text/javascript" defer></script>
     <script src="{{ mix('/js/clock.js') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/mypage.js') }}" type="text/javascript"></script>
-    <script src="{{ mix('/js/distance.js') }}" type="text/javascript" defer></script>
+    <script src="{{ mix('/js/common/distance.js') }}" type="text/javascript" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@0/dist/ua-parser.min.js"></script>
     <!--[if lt IE 9]>
     <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>

@@ -1,6 +1,14 @@
 $(function () {
+    var clickFlg = false;
 
     $('.js_set_up_btn').click(function (e) {
+        if (clickFlg) {
+            return false;
+        }
+        clickFlg = true;
+
+        $('#loader-bg').css('display', 'block');
+
         let workspaceType = $(this).parent().attr('id');
         //Userエージェント情報を取得する処理
         let browser = UAParser().browser.name;
@@ -10,6 +18,7 @@ $(function () {
         navigator.geolocation.getCurrentPosition(here_success_callback, here_error_call);
 
         function here_error_call(error) {
+            clickFlg = false;
             $('div.hereArea p.errorMsg').text('位置情報が取得出来ませんでした。');
             console.log('Error code:' + error.code + ' msg:' + error.message);
         }
@@ -50,10 +59,12 @@ $(function () {
                             }
                         }
                     } else {
+                        clickFlg = false;
                         console.log("位置情報取得は成功しましたが、住所情報の取得に失敗しました。");
                         $('div.hereArea p.errorMsg').text('位置情報が取得出来ませんでした。');
                     }
 
+                    $('#loader-bg').css('display', 'none');
                     if (confirm(address + 'で位置情報を登録します。\n本当によろしいでしょうか？')) {
                         //ajaxでデータ送信
                         $.ajax({
@@ -76,17 +87,18 @@ $(function () {
                             },
                         })
                             .done(function (data) {
-                                console.log(data);
-                                console.log(data['address']);
+                                clickFlg = false;
+                                $('.terminal_location_result_message_wrapper').css('display', 'block');;
+                                $('.alert-success').text('位置情報の登録が完了しました。');
                                 let addressType = $('#' + data['workspace_type']);
-                                console.log(addressType);
                                 addressType.text(data['address']);
                             })
                             .fail(function (jqXHR, textStatus, errorThrown) {
+                                clickFlg = false;
                                 alert("位置情報の登録に失敗しました。");
                             });
                     }
-
+                    clickFlg = false;
                     return false;
                 }
             );

@@ -5,13 +5,17 @@
             <img src="{{ asset('/img/loading/aws.gif') }}"  alt='' style="height: 200px; width: 200px">
         </div>
     </div>
+
+    {{--<div class="bouncingLoader" style="display: none">--}}
+        {{--<div></div>--}}
+        {{--<div></div>--}}
+        {{--<div></div>--}}
+    {{--</div>--}}
     {{--出退勤処理をajaxで行う場合、ここはajax後のdoneでhtmlを埋め込む。--}}
     {{--<div class="attendance_complete" style="display: none"></div>--}}
     {{--ここをpostで行う場合、Sessionで完了メッセージを埋め込む。--}}
-    <div class="attendance_result_message_wrapper">
-        @if(Session::has('result_message'))
-            @include('front.element.form.success_session_alert')
-        @endif
+    <div class="attendance_result_message_wrapper" style="display: none">
+        @include('front.element.form.success_session_alert')
     </div>
     <div id="realTimeClockArea" class="clock"></div>
     <div class="btn_wrapper">

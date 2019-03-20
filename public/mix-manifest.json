@@ -2,11 +2,11 @@
     "/js/app.js": "/js/app.js?id=207dd2295e4b5f8501ab",
     "/css/app.css": "/css/app.css?id=8565e002482d824c25a7",
     "/css/attendance.css": "/css/attendance.css?id=13784db0c592299a0aa2",
-    "/css/mypage.css": "/css/mypage.css?id=6d261ada0c60b1d9da3a",
+    "/css/mypage.css": "/css/mypage.css?id=917cdc238c8a3e8b15ba",
     "/css/register_complete.css": "/css/register_complete.css?id=1742088d151803b6b641",
-    "/js/attendance.js": "/js/attendance.js?id=c0bba58cc33595b973eb",
+    "/js/attendance.js": "/js/attendance.js?id=1305ac5668fb3a9dc784",
     "/js/clock.js": "/js/clock.js?id=43f7acc40608d967463f",
-    "/js/distance.js": "/js/distance.js?id=d48aceea427d77036610",
-    "/js/geolocation.js": "/js/geolocation.js?id=b1b4bbfdb689c30784d2",
-    "/js/mypage.js": "/js/mypage.js?id=ea44637bc2b80600a2fc"
+    "/js/common/distance.js": "/js/common/distance.js?id=3f8c751b583a33b02afc",
+    "/js/common/geolocation.js": "/js/common/geolocation.js?id=b1b4bbfdb689c30784d2",
+    "/js/mypage.js": "/js/mypage.js?id=47e02f4816c6975ea16e"
 }
